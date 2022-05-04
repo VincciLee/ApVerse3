@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--<androidx.constraintlayout.widget.ConstraintLayout -->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent">-->
+
+    <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteX="20dp">
+
+        <TextView
+            android:id="@+id/text_s_capacity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="45dp"
+            android:text="Capacity : "
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/btn_Book"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="100dp"
+            android:text="Book"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/text_s_room"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hello, this is room booking"
+            android:textSize="20sp" />
+    </com.google.android.material.card.MaterialCardView>
+
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->

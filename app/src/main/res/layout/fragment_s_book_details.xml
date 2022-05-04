@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.student.book.SBookDetailsFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_book_info"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_margin="15dp">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="15dp"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/unknown" />
+
+        <TextView
+            android:id="@+id/text_s_book_details_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="15dp"
+            android:text="Book Title"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/text_s_book_details_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_gravity="right"
+            android:text="Book Author"
+            android:textSize="16sp"
+            android:textStyle="italic"/>
+
+        <TextView
+            android:id="@+id/text_s_book_details_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="40dp"
+            android:text="Book Id"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/text_s_book_details_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="40dp"
+            android:layout_gravity="right"
+            android:text="Book Year"
+            android:textSize="16sp"
+            android:textStyle="italic"/>
+
+        <Button
+            android:id="@+id/btn_reserve"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="70dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:text="Reserve"/>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_s_book_details"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="150dp"/>
+
+</FrameLayout>

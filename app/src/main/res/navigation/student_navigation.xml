@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/student_navigation"
+    app:startDestination="@id/nav_s_home">
+
+    <fragment
+        android:id="@+id/nav_s_home"
+        android:name="com.example.apverse.ui.student.home.SHomeFragment"
+        android:label="fragment_s_home"
+        tools:layout="@layout/fragment_s_home" />
+    <fragment
+        android:id="@+id/nav_s_room"
+        android:name="com.example.apverse.ui.student.room.SRoomFragment"
+        android:label="fragment_s_room"
+        tools:layout="@layout/fragment_s_room" >
+        <action
+            android:id="@+id/action_nav_s_room_to_SRoomBookFragment"
+            app:destination="@id/SRoomBookFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/SRoomBookFragment"
+        android:name="com.example.apverse.ui.student.room.SRoomBookFragment"
+        android:label="fragment_s_room_book"
+        tools:layout="@layout/fragment_s_room_book" >
+        <argument
+            android:name="roomId"
+            app:argType="string" />
+        <argument
+            android:name="capacity"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_SRoomBookFragment_to_nav_s_room"
+            app:destination="@id/nav_s_room" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_s_book"
+        android:name="com.example.apverse.ui.student.book.SBookFragment"
+        android:label="fragment_s_book"
+        tools:layout="@layout/fragment_s_book" >
+        <action
+            android:id="@+id/action_nav_s_book_to_SBookDetailsFragment"
+            app:destination="@id/SBookDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_s_computer"
+        android:name="com.example.apverse.ui.student.computer.SComputerFragment"
+        android:label="fragment_s_computer"
+        tools:layout="@layout/fragment_s_computer" >
+        <action
+            android:id="@+id/action_nav_s_computer_self"
+            app:destination="@id/nav_s_computer" />
+    </fragment>
+    <fragment
+        android:id="@+id/SBookDetailsFragment"
+        android:name="com.example.apverse.ui.student.book.SBookDetailsFragment"
+        android:label="fragment_s_book_details"
+        tools:layout="@layout/fragment_s_book_details" />
+</navigation>
