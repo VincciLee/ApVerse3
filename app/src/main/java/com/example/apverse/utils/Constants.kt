@@ -32,7 +32,10 @@ object Constants {
     const val BOOK_IMAGE: String = "book_image"
     const val BOOK_STATUS: String = "book_status"
 
-    const val RESERVATION__STATUS: String = "reservation_status"
+    const val RESERVATION_STATUS: String = "reservation_status"
+    const val READY: String = "ready"
+    const val IS_READY: String = "Ready"
+    const val PENDING: String = "Pending"
 
     const val COMPUTER_ID: String = "computer_id"
     const val COMPUTER_STATUS: String = "computer_status"

@@ -44,8 +44,6 @@ class BookAdapter(
             val bookImage = item.book_image
             val bookId = item.book_id
 
-            Log.i("ApVerse::BookAdapter", "docId: $docId")
-
             holder.itemView.findViewById<TextView>(R.id.text_s_book_title).text = bookTitle
             holder.itemView.findViewById<TextView>(R.id.text_s_book_author).text = bookAuthor
             holder.itemView.findViewById<TextView>(R.id.text_s_book_status).text = bookStatus

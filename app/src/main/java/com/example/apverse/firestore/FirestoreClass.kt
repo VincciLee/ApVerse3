@@ -33,7 +33,6 @@ class FirestoreClass {
 
     fun getUserDetails(activity: MainActivity){
         mFireStore.collection(Constants.USERS)
-//            .document(getCurrentUserEmail())
             .whereEqualTo(Constants.USER_EMAIL, getCurrentUserEmail())
             .get()
             .addOnSuccessListener { documents ->
@@ -44,6 +43,10 @@ class FirestoreClass {
                     Log.i("ApVerse", user.user_name)
                     Log.i("ApVerse", user.user_type)
                     activity.DisplayHeaderInfo(user)
+                }
+
+                if(documents == null){
+                    Log.e("ApVerse::Firestore", "No User Found.")
                 }
             }
             .addOnFailureListener { exception ->
@@ -279,7 +282,7 @@ class FirestoreClass {
 
                     when(fragment){
                         is SBookFragment -> {
-                            Log.i("ApVerse::Firebase", "successLoadComputers()")
+                            Log.i("ApVerse::Firebase", "successLoadBooks()")
                             fragment.successLoadBooks(bookList)
                         }
                     }
@@ -305,6 +308,46 @@ class FirestoreClass {
             }
             .addOnFailureListener { e ->
                 Log.e("ApVerse::Firebase", "Error getting book details", e)
+            }
+    }
+
+    fun getBookReservation(fragment: Fragment, bookId: String) {
+        val reservationList: ArrayList<BookReservation> = ArrayList()
+        var hasReservation: Int = 0
+
+        mFireStore.collection(Constants.BOOK_RESERVATION)
+            .whereEqualTo(Constants.BOOK_ID, bookId)
+            .addSnapshotListener{ snapshot, e ->
+
+                if(e != null){
+                    Log.e("ApVerse::Firestore", "Listen Failed", e)
+                    return@addSnapshotListener
+                }
+
+                if(snapshot != null){
+                    val documents = snapshot.documents
+
+                    documents.forEach{
+                        val reservation = it.toObject(BookReservation::class.java)
+
+                        if (reservation != null){
+                            reservation.doc_id = it.id
+                            reservationList.add(reservation)
+                            Log.i("ApVerse::Firestore", reservation.student_name+", "+reservation.reservation_status+", "+reservation.ready)
+
+                            if(reservation.student_email == getCurrentUserEmail()){
+                                hasReservation += 1
+                            }
+                        }
+                    }
+
+                    when(fragment){
+                        is SBookDetailsFragment -> {
+                            Log.i("ApVerse::Firebase", "successLoadReservations()")
+                            fragment.successLoadReservation(reservationList, hasReservation)
+                        }
+                    }
+                }
             }
     }
 
