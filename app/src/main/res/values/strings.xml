@@ -9,7 +9,8 @@
 
     <string name="menu_home">Home</string>
     <string name="menu_room">Discussion Room</string>
-    <string name="menu_book">Book Reservation</string>
+    <string name="menu_book">Library Book</string>
+    <string name="menu_reservation">Book Reservation</string>
     <string name="menu_computer">Computer</string>
     <string name="logout">Logout</string>
     <!-- TODO: Remove or change this placeholder text -->

@@ -14,3 +14,14 @@ data class BookReservation(
     val student_name: String = "",
     val time: String = ""
 ): Parcelable
+
+@Parcelize
+data class NewBookReservation(
+    val book_id: String = "",
+    val date: String = "",
+    var ready: Boolean = false,
+    val reservation_status: String = "",
+    val student_email: String = "",
+    val student_name: String = "",
+    val time: String = ""
+): Parcelable

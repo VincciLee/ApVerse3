@@ -31,6 +31,31 @@ class FirestoreClass {
         return email
     }
 
+    fun getUserDetails(fragment: Fragment){
+        var user: Users = Users()
+
+        mFireStore.collection(Constants.USERS)
+            .whereEqualTo(Constants.USER_EMAIL, getCurrentUserEmail())
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    user = document.toObject(Users::class.java)!!
+                }
+
+                when (fragment) {
+                    is SBookDetailsFragment ->
+                        fragment.reserveBook(user)
+                }
+
+                if(documents == null){
+                    Log.e("ApVerse::Firestore", "No User Found.")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("ApVerse::Firebase", "Error", exception)
+            }
+    }
+
     fun getUserDetails(activity: MainActivity){
         mFireStore.collection(Constants.USERS)
             .whereEqualTo(Constants.USER_EMAIL, getCurrentUserEmail())
@@ -346,6 +371,19 @@ class FirestoreClass {
                             Log.i("ApVerse::Firebase", "successLoadReservations()")
                             fragment.successLoadReservation(reservationList, hasReservation)
                         }
+                    }
+                }
+            }
+    }
+
+    fun reserveBook(fragment: Fragment, reservationInfo: NewBookReservation) {
+        mFireStore.collection(Constants.BOOK_RESERVATION)
+            .document()
+            .set(reservationInfo, SetOptions.merge())
+            .addOnSuccessListener {
+                when (fragment) {
+                    is SBookDetailsFragment -> {
+                        fragment.successReserveBook()
                     }
                 }
             }
