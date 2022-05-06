@@ -56,5 +56,9 @@
         android:id="@+id/SBookDetailsFragment"
         android:name="com.example.apverse.ui.student.book.SBookDetailsFragment"
         android:label="fragment_s_book_details"
-        tools:layout="@layout/fragment_s_book_details" />
+        tools:layout="@layout/fragment_s_book_details" >
+        <argument
+            android:name="bookId"
+            app:argType="string" />
+    </fragment>
 </navigation>

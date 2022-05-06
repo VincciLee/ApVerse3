@@ -42,6 +42,7 @@ class BookAdapter(
             val bookAuthor = item.book_author
             val bookStatus = item.book_status
             val bookImage = item.book_image
+            val bookId = item.book_id
 
             Log.i("ApVerse::BookAdapter", "docId: $docId")
 
@@ -56,7 +57,7 @@ class BookAdapter(
                 .into(holder.itemView.findViewById<ImageView>(R.id.s_book_img))
 
             holder.itemView.findViewById<Button>(R.id.btn_view).setOnClickListener { root ->
-                fragment.findNavController().navigate(SBookFragmentDirections.actionNavSBookToSBookDetailsFragment())
+                fragment.findNavController().navigate(SBookFragmentDirections.actionNavSBookToSBookDetailsFragment(bookId))
             }
         }
     }

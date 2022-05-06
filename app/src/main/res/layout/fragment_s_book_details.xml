@@ -14,7 +14,7 @@
         android:layout_margin="15dp">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/s_book_details_image"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_gravity="center_vertical"

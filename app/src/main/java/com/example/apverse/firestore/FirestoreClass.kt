@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import com.example.apverse.MainActivity
 import com.example.apverse.model.*
 import com.example.apverse.ui.login.LoginFragment
+import com.example.apverse.ui.student.book.SBookDetailsFragment
 import com.example.apverse.ui.student.book.SBookFragment
 import com.example.apverse.ui.student.computer.SComputerFragment
 import com.example.apverse.ui.student.room.SRoomBookFragment
@@ -257,8 +258,7 @@ class FirestoreClass {
 
         mFireStore.collection(Constants.BOOKS)
             .orderBy(Constants.BOOK_TITLE)
-            .addSnapshotListener{
-                    snapshot, e ->
+            .addSnapshotListener{ snapshot, e ->
 
                 if(e != null){
                     Log.e("ApVerse::Firestore", "Listen Failed", e)
@@ -284,6 +284,27 @@ class FirestoreClass {
                         }
                     }
                 }
+            }
+    }
+
+    fun getBookDetails(fragment: Fragment, bookId: String){
+        mFireStore.collection(Constants.BOOKS)
+            .whereEqualTo(Constants.BOOK_ID, bookId)
+            .get()
+            .addOnSuccessListener { documents ->
+                for(document in documents) {
+                    var book = document.toObject(Books::class.java)
+                    book.doc_id = document.id
+
+                    when (fragment) {
+                        is SBookDetailsFragment -> {
+                            fragment.showBookDetails(book)
+                        }
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e("ApVerse::Firebase", "Error getting book details", e)
             }
     }
 
