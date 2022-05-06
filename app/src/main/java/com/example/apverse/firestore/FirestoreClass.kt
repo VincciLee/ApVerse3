@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import com.example.apverse.MainActivity
 import com.example.apverse.model.*
+import com.example.apverse.ui.librarian.room.LRoomFragment
 import com.example.apverse.ui.login.LoginFragment
 import com.example.apverse.ui.student.book.SBookDetailsFragment
 import com.example.apverse.ui.student.book.SBookFragment
@@ -17,6 +18,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.auth.User
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class FirestoreClass {
     private val mFireStore = FirebaseFirestore.getInstance()
@@ -189,14 +195,112 @@ class FirestoreClass {
             }
     }
 
+    fun getRoomBookings(fragment: Fragment){
+        val bookingList: ArrayList<RoomBooking> = ArrayList()
+        var count = 0
+
+        mFireStore.collection(Constants.ROOM_BOOKING)
+            .orderBy(Constants.DATE)
+            .orderBy(Constants.TIME)
+            .get()
+            .addOnSuccessListener { document ->
+                for (i in document.documents){
+                    val booking = i.toObject(RoomBooking::class.java)
+
+                    val current = Calendar.getInstance().time
+                    val dateFormatter = SimpleDateFormat("yyyy-MM-dd")
+                    val dataDate = booking?.date
+                    val today = dateFormatter.format(current)
+                    val student = booking?.student_name
+
+                    Log.i("ApVerse::Firebase", "student: $student")
+                    Log.i("ApVerse::Firebase", "dataDate: $dataDate")
+
+                    if(dataDate?.compareTo(today) == 0){
+                        bookingList.add(booking)
+                        count += 1
+                        Log.i("ApVerse::Firebase", "count: $count")
+                    }
+                    else if(dataDate?.compareTo(today)!! > 0){
+                        bookingList.add(booking)
+                        count += 1
+                        Log.i("ApVerse::Firebase", "count: $count")
+                    }
+                }
+
+                when (fragment) {
+                    is LRoomFragment -> {
+                        Log.i("ApVerse::Firebase", "successLoadRoomBoookings()")
+                        fragment.successLoadRoomBoookings(bookingList)
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e("ApVerse::Firebase", "Get Bookings Failed.", e)
+
+                when (fragment) {
+                    is LRoomFragment -> {
+                        fragment.failedLoadRoomBoookings("Unable to retrieve room booking info.")
+                    }
+                }
+
+            }
+
+//            .addSnapshotListener { snapshot, e ->
+//
+//                if(e != null){
+//                    Log.e("ApVerse::Firestore", "Listen Failed", e)
+//                    return@addSnapshotListener
+//                }
+//
+//                if(snapshot != null) {
+//                    val documents = snapshot.documents
+//
+//                    documents.forEach{
+//                        val booking = it.toObject(RoomBooking::class.java)
+//
+//                        val current = Calendar.getInstance().time
+//                        val dateFormatter = SimpleDateFormat("yyyy-MM-dd")
+//                        val dataDate = booking?.date
+//                        val today = dateFormatter.format(current)
+//                        val student = booking?.student_name
+//
+//                        Log.i("ApVerse::Firebase", "student: $student")
+//                        Log.i("ApVerse::Firebase", "dataDate: $dataDate")
+//
+//                        if(booking != null) {
+//                            if(dataDate?.compareTo(today) == 0){
+//                                bookingList.add(booking)
+//                                count += 1
+//                                Log.i("ApVerse::Firebase", "count: $count")
+//                            }
+//                            else if(dataDate?.compareTo(today)!! > 0){
+//                                bookingList.add(booking)
+//                                count += 1
+//                                Log.i("ApVerse::Firebase", "count: $count")
+//                            }
+//                        }
+//                    }
+//
+//                    Log.i("ApVerse::Firebase", "count: $count")
+//
+//                    when (fragment) {
+//                        is LRoomFragment -> {
+//                            Log.i("ApVerse::Firebase", "successLoadRoomBoookings()")
+//                            fragment.successLoadRoomBoookings(bookingList)
+//                        }
+//                    }
+//                }
+//            }
+    }
+
     fun getComputers(fragment: Fragment) {
         val computerList: ArrayList<Computers> = ArrayList()
         var isUsing = false
 
         mFireStore.collection(Constants.COMPUTERS)
             .orderBy(Constants.COMPUTER_ID)
-            .addSnapshotListener{
-                snapshot, e ->
+            .addSnapshotListener{ snapshot, e ->
 
                 if(e != null){
                     Log.e("ApVerse::Firestore", "Listen Failed", e)
@@ -342,6 +446,7 @@ class FirestoreClass {
 
         mFireStore.collection(Constants.BOOK_RESERVATION)
             .whereEqualTo(Constants.BOOK_ID, bookId)
+            .orderBy(Constants.DATE)
             .addSnapshotListener{ snapshot, e ->
 
                 if(e != null){

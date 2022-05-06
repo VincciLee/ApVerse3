@@ -45,7 +45,7 @@ class SBookDetailsFragment : BaseFragment() {
         val root: View = binding.root
 
         (requireActivity() as MainActivity).supportActionBar?.title = "Book Details"
-        
+
         // Show book info
         getBookDetails(args.bookId)
 
@@ -104,12 +104,12 @@ class SBookDetailsFragment : BaseFragment() {
         val email = myUser.user_email
         val name = myUser.user_name
 
-        val c = Calendar.getInstance()
-        val year = c.get(Calendar.YEAR)
-        val month = c.get(Calendar.MONTH)
-        val day = c.get(Calendar.DAY_OF_MONTH)
-        val hour = c.get(Calendar.HOUR_OF_DAY)
-        val minute = c.get(Calendar.MINUTE)
+//        val c = Calendar.getInstance()
+//        val year = c.get(Calendar.YEAR)
+//        val month = c.get(Calendar.MONTH)
+//        val day = c.get(Calendar.DAY_OF_MONTH)
+//        val hour = c.get(Calendar.HOUR_OF_DAY)
+//        val minute = c.get(Calendar.MINUTE)
 
 //        val date = "$year-$month-$day"
 //        val time = "$hour:$minute"
