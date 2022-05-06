@@ -20,4 +20,9 @@
         android:name="com.example.apverse.ui.librarian.room.LRoomFragment"
         android:label="fragment_l_room"
         tools:layout="@layout/fragment_l_room" />
+    <fragment
+        android:id="@+id/nav_l_reservation"
+        android:name="com.example.apverse.ui.librarian.room.LRoomReservationFragment"
+        android:label="fragment_l_room_reservation"
+        tools:layout="@layout/fragment_l_room_reservation" />
 </navigation>

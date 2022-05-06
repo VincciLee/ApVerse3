@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             appBarConfiguration = AppBarConfiguration(
                 setOf(
-                    R.id.nav_l_home, R.id.nav_l_room, R.id.nav_l_book, R.id.nav_logout
+                    R.id.nav_l_home, R.id.nav_l_room, R.id.nav_l_book, R.id.nav_l_reservation, R.id.nav_logout
                 ), drawerLayout
             )
         }else if(Constants.USERTYPE == "student"){
