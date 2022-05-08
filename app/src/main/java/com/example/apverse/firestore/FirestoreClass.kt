@@ -601,10 +601,45 @@ class FirestoreClass {
             }
     }
 
+    fun validateReservation(
+        fragment: Fragment,
+        docId: String,
+        reservationHashMap: HashMap<String, Any>,
+        bookId: String
+    ) {
+        var bookStatus: String  = ""
+
+        mFireStore.collection(Constants.BOOKS)
+            .whereEqualTo(Constants.BOOK_ID, bookId)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    val book = document.toObject(Books::class.java)!!
+                    book.doc_id = document.id
+                    bookStatus = book.book_status
+                }
+
+                if(bookStatus == "Borrowed") {
+                    when (fragment) {
+                        is LBookReservationFragment -> {
+                            fragment.failedUpdateReservation("Cannot send alert because the book is being borrowed.")
+                        }
+                    }
+                }
+                else{
+                    updateReservation(fragment, docId, reservationHashMap)
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("ApVerse::Firebase", "Error", exception)
+            }
+    }
+
     fun updateReservation(
         fragment: Fragment,
         docId: String,
-        reservationHashMap: HashMap<String, Any>) {
+        reservationHashMap: HashMap<String, Any>
+    ) {
 
         mFireStore.collection(Constants.BOOK_RESERVATION)
             .document(docId)
@@ -623,7 +658,7 @@ class FirestoreClass {
 
                 when(fragment){
                     is LBookReservationFragment ->{
-                        fragment.failedUpdateReservation()
+                        fragment.failedUpdateReservation("Reservation update failed.")
                     }
                 }
             }

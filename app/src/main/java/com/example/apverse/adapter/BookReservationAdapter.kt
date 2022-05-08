@@ -68,7 +68,7 @@ class BookReservationAdapter(
                 }
                 else {
                     reservationHashMap[Constants.READY] = true
-                    FirestoreClass().updateReservation(fragment, docId, reservationHashMap)
+                    FirestoreClass().validateReservation(fragment, docId, reservationHashMap, bookId)
                 }
             }
         }

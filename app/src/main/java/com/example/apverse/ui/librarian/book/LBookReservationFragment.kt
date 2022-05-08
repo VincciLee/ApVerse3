@@ -55,8 +55,8 @@ class LBookReservationFragment : BaseFragment() {
         reload()
     }
 
-    fun failedUpdateReservation(){
-        showErrorSnackBar("Reservation update failed", true)
+    fun failedUpdateReservation(message: String){
+        showErrorSnackBar("$message", true)
     }
 
     fun successDeleteReservation(){
