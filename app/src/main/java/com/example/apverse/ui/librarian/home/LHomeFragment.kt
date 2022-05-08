@@ -37,6 +37,9 @@ class LHomeFragment : BaseFragment() {
         _binding = FragmentLHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        val inflater = layoutInflater
+        val view: View = inflater.inflate(R.layout.fragment_l_home, null)
+
         (requireActivity() as MainActivity).supportActionBar?.title = "Homepage"
 
 //        binding.textLHomeBook.text = viewModel.bookingCount.toString()
@@ -47,14 +50,13 @@ class LHomeFragment : BaseFragment() {
 //        }
 
         getBookingCount()
-
         getReservationCount()
 
         return root
     }
 
     private fun getBookingCount() {
-        showProgressDialog()
+//        showProgressDialog()
 
         val current = Calendar.getInstance().time
         val dateFormatter = SimpleDateFormat("yyyy-MM-dd")
@@ -65,7 +67,7 @@ class LHomeFragment : BaseFragment() {
 
     fun successGetBookingCount(bookingList: ArrayList<RoomBooking>) {
         binding.textLHomeBook.text = bookingList.size.toString()
-        hideProgressDialog()
+//        hideProgressDialog()
     }
 
     private fun getReservationCount() {

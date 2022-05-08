@@ -17,6 +17,7 @@ import com.example.apverse.ui.login.LoginFragment
 import com.example.apverse.ui.student.book.SBookDetailsFragment
 import com.example.apverse.ui.student.book.SBookFragment
 import com.example.apverse.ui.student.computer.SComputerFragment
+import com.example.apverse.ui.student.home.SHomeFragment
 import com.example.apverse.ui.student.room.SRoomBookFragment
 import com.example.apverse.ui.student.room.SRoomFragment
 import com.example.apverse.utils.Constants
@@ -320,7 +321,7 @@ class FirestoreClass {
                 }
             }
             .addOnFailureListener { e ->
-                Log.e("ApVerse::Firebase", "Get Bookings Failed.", e)
+                Log.e("ApVerse::Firebase", "getBookingCount() Failed.", e)
             }
     }
 
@@ -385,6 +386,31 @@ class FirestoreClass {
 //            .addOnFailureListener { e ->
 //                Log.e("ApVerse::Firebase", "Get Computers Failed.", e)
 //            }
+    }
+
+    fun getComputerCount(fragment: Fragment) {
+        val computerList: ArrayList<Computers> = ArrayList()
+
+        mFireStore.collection(Constants.COMPUTERS)
+            .whereEqualTo(Constants.COMPUTER_STATUS, Constants.FREE)
+            .get()
+            .addOnSuccessListener { document ->
+                for(i in document.documents) {
+                    val computer = i.toObject(Computers::class.java)!!
+                    computer.doc_id = i.id
+                    computerList.add(computer)
+                }
+
+                when (fragment) {
+                    is SHomeFragment -> {
+                        Log.i("ApVerse::Firebase", "Success getComputerCount() = "+computerList.size.toString())
+                        fragment.successGetComputerCount(computerList)
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e("ApVerse::Firebase", "Failed getComputerCount()", e)
+            }
     }
 
     fun updateComputerStatus(
