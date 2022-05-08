@@ -39,16 +39,18 @@ class BookReservationAdapter(
             val item = dataset[position]
             val docId = item.doc_id
             val bookId = item.book_id
+            val bookTitle = item.book_title
+            val bookImage = item.book_image
             val isReady = item.ready
             val name = item.student_name
             val date = item.date
 
             // Get Book Details
-            FirestoreClass().getBookDetails(bookId)
-
-            val bookInfo = Books()
-            val bookTitle = bookInfo.book_title
-            val bookImage = bookInfo.book_image
+//            FirestoreClass().getBookDetails(bookId)
+//
+//            val bookInfo = Books()
+//            val bookTitle = bookInfo.book_title
+//            val bookImage = bookInfo.book_image
 
             holder.itemView.findViewById<TextView>(R.id.text_reservation_title).text = bookTitle
             holder.itemView.findViewById<TextView>(R.id.text_reservation_id).text = bookId

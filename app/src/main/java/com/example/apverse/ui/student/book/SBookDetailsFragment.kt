@@ -36,7 +36,9 @@ class SBookDetailsFragment : BaseFragment() {
     private var _binding: FragmentSBookDetailsBinding? = null
     private val binding get() = _binding!!
     private val args: SBookDetailsFragmentArgs by navArgs()
-//    private var bookImage: String = ""
+
+    private var bookTitle: String = ""
+    private var bookImage: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,10 +74,12 @@ class SBookDetailsFragment : BaseFragment() {
         binding.textSBookDetailsId.text = book.book_id
         binding.textSBookDetailsAuthor.text = book.book_author
         binding.textSBookDetailsYear.text = book.book_year
-//        bookImage = book.book_image
+
+        bookTitle = book.book_title
+        bookImage = book.book_image
 
         Glide.with(this)
-            .load(book.book_image)
+            .load(bookImage)
             .apply(
                 RequestOptions.placeholderOf(R.drawable.unknown)
                 .override(80,80))
@@ -105,8 +109,6 @@ class SBookDetailsFragment : BaseFragment() {
         val status = "Reserved"
         val email = myUser.user_email
         val name = myUser.user_name
-//        val bookTitle = binding.textSBookDetailsTitle.text
-//        val bookImage = binding.sBookDetailsImage
 
 //        val c = Calendar.getInstance()
 //        val year = c.get(Calendar.YEAR)
@@ -127,6 +129,8 @@ class SBookDetailsFragment : BaseFragment() {
 
         val reservation = NewBookReservation(
             bookId,
+            bookImage,
+            bookTitle,
             date,
             false,
             status,

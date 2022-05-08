@@ -7,6 +7,8 @@ import kotlinx.android.parcel.Parcelize
 data class BookReservation(
     var doc_id: String = "",
     val book_id: String = "",
+    val book_image: String = "",
+    val book_title: String = "",
     val date: String = "",
     var ready: Boolean = false,
     val reservation_status: String = "",
@@ -18,6 +20,8 @@ data class BookReservation(
 @Parcelize
 data class NewBookReservation(
     val book_id: String = "",
+    val book_image: String = "",
+    val book_title: String = "",
     val date: String = "",
     var ready: Boolean = false,
     val reservation_status: String = "",
