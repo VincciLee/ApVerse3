@@ -15,9 +15,10 @@
         <entry key="..\:/Documents/Courses/Deg2_Sem 2/MAE/ApVerse3/app/src/main/res/layout/fragment_base.xml" value="0.1" />
         <entry key="..\:/Documents/Courses/Deg2_Sem 2/MAE/ApVerse3/app/src/main/res/layout/fragment_gallery.xml" value="0.2" />
         <entry key="..\:/Documents/Courses/Deg2_Sem 2/MAE/ApVerse3/app/src/main/res/layout/fragment_home.xml" value="0.2" />
+        <entry key="..\:/Documents/Courses/Deg2_Sem 2/MAE/ApVerse3/app/src/main/res/layout/fragment_l_book_reservation.xml" value="0.4740484429065744" />
         <entry key="..\:/Documents/Courses/Deg2_Sem 2/MAE/ApVerse3/app/src/main/res/layout/fragment_l_home.xml" value="0.18425925925925926" />
         <entry key="..\:/Documents/Courses/Deg2_Sem 2/MAE/ApVerse3/app/src/main/res/layout/fragment_l_room.xml" value="0.21944444444444444" />
-        <entry key="..\:/Documents/Courses/Deg2_Sem 2/MAE/ApVerse3/app/src/main/res/layout/fragment_l_room_reservation.xml" value="0.152" />
+        <entry key="..\:/Documents/Courses/Deg2_Sem 2/MAE/ApVerse3/app/src/main/res/layout/fragment_l_room_reservation.xml" value="0.536" />
         <entry key="..\:/Documents/Courses/Deg2_Sem 2/MAE/ApVerse3/app/src/main/res/layout/fragment_login.xml" value="0.25416666666666665" />
         <entry key="..\:/Documents/Courses/Deg2_Sem 2/MAE/ApVerse3/app/src/main/res/layout/fragment_room.xml" value="0.11018518518518519" />
         <entry key="..\:/Documents/Courses/Deg2_Sem 2/MAE/ApVerse3/app/src/main/res/layout/fragment_s_book.xml" value="0.264" />
@@ -32,6 +33,7 @@
         <entry key="..\:/Documents/Courses/Deg2_Sem 2/MAE/ApVerse3/app/src/main/res/layout/login_fragment.xml" value="0.1" />
         <entry key="..\:/Documents/Courses/Deg2_Sem 2/MAE/ApVerse3/app/src/main/res/layout/nav_header_main.xml" value="0.536" />
         <entry key="..\:/Documents/Courses/Deg2_Sem 2/MAE/ApVerse3/app/src/main/res/layout/progress_dialog.xml" value="0.2" />
+        <entry key="..\:/Documents/Courses/Deg2_Sem 2/MAE/ApVerse3/app/src/main/res/layout/reservation_list.xml" value="0.25416666666666665" />
         <entry key="..\:/Documents/Courses/Deg2_Sem 2/MAE/ApVerse3/app/src/main/res/layout/room_booking_list.xml" value="0.4" />
         <entry key="..\:/Documents/Courses/Deg2_Sem 2/MAE/ApVerse3/app/src/main/res/layout/room_list.xml" value="0.1890625" />
         <entry key="..\:/Documents/Courses/Deg2_Sem 2/MAE/ApVerse3/app/src/main/res/menu/activity_main_drawer.xml" value="0.264" />

@@ -3,16 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.librarian.room.LRoomReservationFragment">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/menu_reservation"
-        android:textSize="18sp"/>
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.librarian.book.LBookReservationFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_L_reservation"
+        android:id="@+id/rv_l_reservation_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
 </FrameLayout>

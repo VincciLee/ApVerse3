@@ -43,4 +43,6 @@ object Constants {
     const val IN_USE: String = "In Use"
 
     var USERTYPE: String = "student"
+    var L_BOOK_TITLE: String = ""
+    var L_BOOK_IMG: String = ""
 }

@@ -22,7 +22,7 @@
         tools:layout="@layout/fragment_l_room" />
     <fragment
         android:id="@+id/nav_l_reservation"
-        android:name="com.example.apverse.ui.librarian.room.LRoomReservationFragment"
+        android:name="com.example.apverse.ui.librarian.book.LBookReservationFragment"
         android:label="fragment_l_room_reservation"
-        tools:layout="@layout/fragment_l_room_reservation" />
+        tools:layout="@layout/fragment_l_book_reservation" />
 </navigation>

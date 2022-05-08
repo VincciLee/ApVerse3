@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import com.example.apverse.MainActivity
 import com.example.apverse.model.*
+import com.example.apverse.ui.librarian.book.LBookReservationFragment
 import com.example.apverse.ui.librarian.room.LRoomFragment
 import com.example.apverse.ui.login.LoginFragment
 import com.example.apverse.ui.student.book.SBookDetailsFragment
@@ -419,6 +420,23 @@ class FirestoreClass {
             }
     }
 
+    fun getBookDetails(bookId: String){
+        mFireStore.collection(Constants.BOOKS)
+            .whereEqualTo(Constants.BOOK_ID, bookId)
+            .get()
+            .addOnSuccessListener { documents ->
+                for(document in documents) {
+                    var book = document.toObject(Books::class.java)
+                    Constants.L_BOOK_TITLE = book.book_title
+                    Constants.L_BOOK_IMG = book.book_image
+                    book.doc_id = document.id
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e("ApVerse::Firebase", "Error getting book details", e)
+            }
+    }
+
     fun getBookDetails(fragment: Fragment, bookId: String){
         mFireStore.collection(Constants.BOOKS)
             .whereEqualTo(Constants.BOOK_ID, bookId)
@@ -437,6 +455,42 @@ class FirestoreClass {
             }
             .addOnFailureListener { e ->
                 Log.e("ApVerse::Firebase", "Error getting book details", e)
+            }
+    }
+
+    fun getReservations(fragment: Fragment) {
+        val reservationList: ArrayList<BookReservation> = ArrayList()
+
+        mFireStore.collection(Constants.BOOK_RESERVATION)
+            .orderBy(Constants.DATE)
+            .orderBy(Constants.TIME)
+            .addSnapshotListener{ snapshot, e ->
+
+                if(e != null){
+                    Log.e("ApVerse::Firestore", "Listen Failed", e)
+                    return@addSnapshotListener
+                }
+
+                if(snapshot != null){
+                    val documents = snapshot.documents
+
+                    documents.forEach{
+                        val reservation = it.toObject(BookReservation::class.java)
+
+                        if (reservation != null){
+                            reservation.doc_id = it.id
+                            reservationList.add(reservation)
+                            Log.i("ApVerse::Firestore", reservation.student_name+", "+reservation.reservation_status+", "+reservation.ready)
+                        }
+                    }
+
+                    when(fragment){
+                        is LBookReservationFragment -> {
+                            Log.i("ApVerse::Firebase", "successLoadReservations()")
+                            fragment.successLoadReservation(reservationList)
+                        }
+                    }
+                }
             }
     }
 
