@@ -4,11 +4,14 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
 import com.example.apverse.MainActivity
 import com.example.apverse.model.*
 import com.example.apverse.ui.librarian.book.LBookDetailsFragment
 import com.example.apverse.ui.librarian.book.LBookFragment
 import com.example.apverse.ui.librarian.book.LBookReservationFragment
+import com.example.apverse.ui.librarian.home.LHomeFragment
+import com.example.apverse.ui.librarian.home.LHomeViewModel
 import com.example.apverse.ui.librarian.room.LRoomFragment
 import com.example.apverse.ui.login.LoginFragment
 import com.example.apverse.ui.student.book.SBookDetailsFragment
@@ -297,6 +300,30 @@ class FirestoreClass {
 //            }
     }
 
+    fun getBookingCount(fragment: Fragment, date: String) {
+        val bookingList: ArrayList<RoomBooking> = ArrayList()
+
+        mFireStore.collection(Constants.ROOM_BOOKING)
+            .whereEqualTo(Constants.DATE, date)
+            .get()
+            .addOnSuccessListener { document ->
+                for (i in document.documents){
+                    val booking = i.toObject(RoomBooking::class.java)!!
+                    bookingList.add(booking)
+                }
+
+                when (fragment) {
+                    is LHomeFragment -> {
+                        Log.i("ApVerse::Firebase", "success getBookingCount()")
+                        fragment.successGetBookingCount(bookingList)
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e("ApVerse::Firebase", "Get Bookings Failed.", e)
+            }
+    }
+
     fun getComputers(fragment: Fragment) {
         val computerList: ArrayList<Computers> = ArrayList()
         var isUsing = false
@@ -536,6 +563,11 @@ class FirestoreClass {
                         is LBookReservationFragment -> {
                             Log.i("ApVerse::Firebase", "successLoadReservations()")
                             fragment.successLoadReservation(reservationList)
+                        }
+
+                        is LHomeFragment -> {
+                            Log.i("ApVerse::Firebase", "successLoadReservations()")
+                            fragment.successGetReservationCount(reservationList)
                         }
                     }
                 }
