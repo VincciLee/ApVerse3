@@ -15,6 +15,7 @@ import com.example.apverse.firestore.FirestoreClass
 import com.example.apverse.model.BookReservation
 import com.example.apverse.model.Books
 import com.example.apverse.ui.librarian.book.LBookReservationFragment
+import com.example.apverse.utils.Constants
 
 class BookReservationAdapter(
     private val fragment: LBookReservationFragment,
@@ -44,13 +45,7 @@ class BookReservationAdapter(
             val isReady = item.ready
             val name = item.student_name
             val date = item.date
-
-            // Get Book Details
-//            FirestoreClass().getBookDetails(bookId)
-//
-//            val bookInfo = Books()
-//            val bookTitle = bookInfo.book_title
-//            val bookImage = bookInfo.book_image
+            val reservationHashMap: HashMap<String, Any> = HashMap()
 
             holder.itemView.findViewById<TextView>(R.id.text_reservation_title).text = bookTitle
             holder.itemView.findViewById<TextView>(R.id.text_reservation_id).text = bookId
@@ -65,6 +60,16 @@ class BookReservationAdapter(
 
             if (isReady == true) {
                 holder.itemView.findViewById<Button>(R.id.btn_alert).text = "Pickup"
+            }
+
+            holder.itemView.findViewById<Button>(R.id.btn_alert).setOnClickListener { root ->
+                if (isReady == true) {
+                    FirestoreClass().deleteReservation(fragment, docId)
+                }
+                else {
+                    reservationHashMap[Constants.READY] = true
+                    FirestoreClass().updateReservation(fragment, docId, reservationHashMap)
+                }
             }
         }
     }

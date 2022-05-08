@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apverse.MainActivity
 import com.example.apverse.R
@@ -47,5 +48,27 @@ class LBookReservationFragment : BaseFragment() {
         val recyclerView = binding.root.findViewById<RecyclerView>(R.id.rv_l_reservation_list)
         recyclerView.adapter = BookReservationAdapter(this, myReservation)
         recyclerView.setHasFixedSize(true)
+    }
+
+    fun successUpdateReservation(){
+        showErrorSnackBar("Book has ready and alert sent to the student.", false)
+        reload()
+    }
+
+    fun failedUpdateReservation(){
+        showErrorSnackBar("Reservation update failed", true)
+    }
+
+    fun successDeleteReservation(){
+        showErrorSnackBar("Book reservation has been removed.", false)
+        reload()
+    }
+
+    fun failedDeleteReservation(){
+        showErrorSnackBar("Book reservation removal failed.", false)
+    }
+
+    fun reload() {
+        this.findNavController().navigate(R.id.action_nav_l_reservation_self)
     }
 }

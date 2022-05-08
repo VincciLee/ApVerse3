@@ -24,5 +24,9 @@
         android:id="@+id/nav_l_reservation"
         android:name="com.example.apverse.ui.librarian.book.LBookReservationFragment"
         android:label="fragment_l_room_reservation"
-        tools:layout="@layout/fragment_l_book_reservation" />
+        tools:layout="@layout/fragment_l_book_reservation" >
+        <action
+            android:id="@+id/action_nav_l_reservation_self"
+            app:destination="@id/nav_l_reservation" />
+    </fragment>
 </navigation>

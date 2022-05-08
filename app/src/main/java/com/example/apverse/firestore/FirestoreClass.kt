@@ -420,22 +420,22 @@ class FirestoreClass {
             }
     }
 
-    fun getBookDetails(bookId: String){
-        mFireStore.collection(Constants.BOOKS)
-            .whereEqualTo(Constants.BOOK_ID, bookId)
-            .get()
-            .addOnSuccessListener { documents ->
-                for(document in documents) {
-                    var book = document.toObject(Books::class.java)
-                    Constants.L_BOOK_TITLE = book.book_title
-                    Constants.L_BOOK_IMG = book.book_image
-                    book.doc_id = document.id
-                }
-            }
-            .addOnFailureListener { e ->
-                Log.e("ApVerse::Firebase", "Error getting book details", e)
-            }
-    }
+//    fun getBookDetails(bookId: String){
+//        mFireStore.collection(Constants.BOOKS)
+//            .whereEqualTo(Constants.BOOK_ID, bookId)
+//            .get()
+//            .addOnSuccessListener { documents ->
+//                for(document in documents) {
+//                    var book = document.toObject(Books::class.java)
+//                    Constants.L_BOOK_TITLE = book.book_title
+//                    Constants.L_BOOK_IMG = book.book_image
+//                    book.doc_id = document.id
+//                }
+//            }
+//            .addOnFailureListener { e ->
+//                Log.e("ApVerse::Firebase", "Error getting book details", e)
+//            }
+//    }
 
     fun getBookDetails(fragment: Fragment, bookId: String){
         mFireStore.collection(Constants.BOOKS)
@@ -543,6 +543,57 @@ class FirestoreClass {
                 when (fragment) {
                     is SBookDetailsFragment -> {
                         fragment.successReserveBook()
+                    }
+                }
+            }
+    }
+
+    fun updateReservation(
+        fragment: Fragment,
+        docId: String,
+        reservationHashMap: HashMap<String, Any>) {
+
+        mFireStore.collection(Constants.BOOK_RESERVATION)
+            .document(docId)
+            .update(reservationHashMap)
+            .addOnSuccessListener { document->
+                Log.i("ApVerse::Firebase","Success Update Reservation Status")
+
+                when(fragment){
+                    is LBookReservationFragment ->{
+                        fragment.successUpdateReservation()
+                    }
+                }
+            }
+            .addOnFailureListener { e->
+                Log.e("ApVerse::Firebase","Error Update Reservation Status",e)
+
+                when(fragment){
+                    is LBookReservationFragment ->{
+                        fragment.failedUpdateReservation()
+                    }
+                }
+            }
+    }
+
+    fun deleteReservation(fragment: Fragment, docId: String){
+        mFireStore.collection(Constants.BOOK_RESERVATION)
+            .document(docId)
+            .delete()
+            .addOnSuccessListener {
+                when(fragment){
+                    is LBookReservationFragment ->{
+                        //fragment.hideProgressDialog()
+                        fragment.successDeleteReservation()
+                    }
+                }
+            }
+            .addOnFailureListener { e->
+                Log.e(fragment.javaClass.simpleName,"Error deleting subplan",e)
+
+                when(fragment){
+                    is LBookReservationFragment ->{
+                        fragment.failedDeleteReservation()
                     }
                 }
             }
