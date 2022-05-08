@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apverse.R
@@ -14,7 +15,7 @@ import com.example.apverse.ui.student.book.SBookDetailsFragment
 import com.example.apverse.utils.Constants
 
 class BookDetailsAdapter(
-    private val fragment: SBookDetailsFragment,
+    private val fragment: Fragment,
     private val dataset: ArrayList<BookReservation>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -42,10 +43,6 @@ class BookDetailsAdapter(
             val date = item.date
             val status = item.reservation_status
             val isReady = item.ready
-
-            Log.i("ApVerse::DetailsAdapter", "studentEmail: $studentEmail")
-            Log.i("ApVerse::DetailsAdapter", "loginEmail: "+FirestoreClass().getCurrentUserEmail())
-            Log.i("ApVerse::DetailsAdapter", "isReady: ${isReady}")
 
             holder.itemView.findViewById<TextView>(R.id.text_reserved_student).text = studentName
             holder.itemView.findViewById<TextView>(R.id.text_reserved_date).text = date

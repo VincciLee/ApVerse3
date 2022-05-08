@@ -86,6 +86,11 @@ class SBookDetailsFragment : BaseFragment() {
             .into(binding.sBookDetailsImage)
     }
 
+    fun failedGetBookDetails() {
+        hideProgressDialog()
+        showErrorSnackBar("Unable to get the book details.", true)
+    }
+
     fun loadReservation(bookId: String){
 //        showProgressDialog()
         FirestoreClass().getBookReservation(this, bookId)

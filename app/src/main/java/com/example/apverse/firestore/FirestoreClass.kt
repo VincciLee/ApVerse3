@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import com.example.apverse.MainActivity
 import com.example.apverse.model.*
+import com.example.apverse.ui.librarian.book.LBookDetailsFragment
 import com.example.apverse.ui.librarian.book.LBookFragment
 import com.example.apverse.ui.librarian.book.LBookReservationFragment
 import com.example.apverse.ui.librarian.room.LRoomFragment
@@ -456,12 +457,53 @@ class FirestoreClass {
                         is SBookDetailsFragment -> {
                             fragment.showBookDetails(book)
                         }
+
+                        is LBookDetailsFragment -> {
+                            fragment.showBookDetails(book)
+                        }
                     }
                 }
             }
             .addOnFailureListener { e ->
                 Log.e("ApVerse::Firebase", "Error getting book details", e)
+
+                when (fragment) {
+                    is SBookDetailsFragment -> {
+                        fragment.failedGetBookDetails()
+                    }
+
+                    is LBookDetailsFragment -> {
+                        fragment.failedGetBookDetails()
+                    }
+                }
             }
+    }
+
+    fun updateBookStatus(
+        fragment: Fragment,
+        docId: String,
+        bookHashMap: HashMap<String, Any>) {
+            mFireStore.collection(Constants.BOOKS)
+                .document(docId)
+                .update(bookHashMap)
+                .addOnSuccessListener { document->
+                    Log.i("ApVerse::Firebase","Success Update Book Status")
+
+                    when(fragment){
+                        is LBookDetailsFragment ->{
+                            fragment.successUpdateBookStatus()
+                        }
+                    }
+                }
+                .addOnFailureListener { e->
+                    Log.e("ApVerse::Firebase","Error Update Book Status",e)
+
+                    when(fragment){
+                        is LBookDetailsFragment ->{
+                            fragment.failedUpdateBookStatus()
+                        }
+                    }
+                }
     }
 
     fun getReservations(fragment: Fragment) {
@@ -533,8 +575,13 @@ class FirestoreClass {
 
                     when(fragment){
                         is SBookDetailsFragment -> {
-                            Log.i("ApVerse::Firebase", "successLoadReservations()")
+                            Log.i("ApVerse::Firebase", "SBookDetailsFragment - successLoadReservations()")
                             fragment.successLoadReservation(reservationList, hasReservation)
+                        }
+
+                        is LBookDetailsFragment -> {
+                            Log.i("ApVerse::Firebase", "LBookDetailsFragment - successLoadReservations()")
+                            fragment.successLoadReservation(reservationList)
                         }
                     }
                 }
