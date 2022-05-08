@@ -7,17 +7,20 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.apverse.R
 import com.example.apverse.model.Books
+import com.example.apverse.ui.librarian.book.LBookFragment
+import com.example.apverse.ui.librarian.book.LBookFragmentDirections
 import com.example.apverse.ui.student.book.SBookFragment
 import com.example.apverse.ui.student.book.SBookFragmentDirections
 
 class BookAdapter(
-    private val fragment: SBookFragment,
+    private val fragment: Fragment,
     private val dataset: ArrayList<Books>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -48,15 +51,32 @@ class BookAdapter(
             holder.itemView.findViewById<TextView>(R.id.text_s_book_author).text = bookAuthor
             holder.itemView.findViewById<TextView>(R.id.text_s_book_status).text = bookStatus
 
-            Glide.with(fragment)
-                .load(bookImage)
-                .apply(RequestOptions.placeholderOf(R.drawable.unknown)
-                    .override(100,100))
-                .into(holder.itemView.findViewById<ImageView>(R.id.s_book_img))
+            when (fragment) {
+                is SBookFragment -> {
+                    Glide.with(fragment)
+                        .load(bookImage)
+                        .apply(RequestOptions.placeholderOf(R.drawable.unknown)
+                            .override(100,100))
+                        .into(holder.itemView.findViewById<ImageView>(R.id.s_book_img))
 
-            holder.itemView.findViewById<Button>(R.id.btn_view).setOnClickListener { root ->
-                fragment.findNavController().navigate(SBookFragmentDirections.actionNavSBookToSBookDetailsFragment(bookId))
+                    holder.itemView.findViewById<Button>(R.id.btn_view).setOnClickListener { root ->
+                        fragment.findNavController().navigate(SBookFragmentDirections.actionNavSBookToSBookDetailsFragment(bookId))
+                    }
+                }
+
+                is LBookFragment -> {
+                    Glide.with(fragment)
+                        .load(bookImage)
+                        .apply(RequestOptions.placeholderOf(R.drawable.unknown)
+                            .override(100,100))
+                        .into(holder.itemView.findViewById<ImageView>(R.id.s_book_img))
+
+                    holder.itemView.findViewById<Button>(R.id.btn_view).setOnClickListener { root ->
+                        fragment.findNavController().navigate(LBookFragmentDirections.actionNavLBookToLBookDetailsFragment(bookId))
+                    }
+                }
             }
+
         }
     }
 

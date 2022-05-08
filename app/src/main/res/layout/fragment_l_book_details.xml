@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.librarian.book.LBookFragment">
+    tools:context=".ui.librarian.book.LBookDetailsFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_l_book"
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/text_l_book_details"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        android:text="@string/hello_blank_fragment" />
 
 </FrameLayout>

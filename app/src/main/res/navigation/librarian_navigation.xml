@@ -14,7 +14,11 @@
         android:id="@+id/nav_l_book"
         android:name="com.example.apverse.ui.librarian.book.LBookFragment"
         android:label="fragment_l_book"
-        tools:layout="@layout/fragment_l_book" />
+        tools:layout="@layout/fragment_l_book" >
+        <action
+            android:id="@+id/action_nav_l_book_to_LBookDetailsFragment"
+            app:destination="@id/LBookDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/nav_l_room"
         android:name="com.example.apverse.ui.librarian.room.LRoomFragment"
@@ -28,5 +32,14 @@
         <action
             android:id="@+id/action_nav_l_reservation_self"
             app:destination="@id/nav_l_reservation" />
+    </fragment>
+    <fragment
+        android:id="@+id/LBookDetailsFragment"
+        android:name="com.example.apverse.ui.librarian.book.LBookDetailsFragment"
+        android:label="fragment_l_book_details"
+        tools:layout="@layout/fragment_l_book_details" >
+        <argument
+            android:name="bookId"
+            app:argType="string" />
     </fragment>
 </navigation>

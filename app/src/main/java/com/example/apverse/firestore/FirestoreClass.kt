@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import com.example.apverse.MainActivity
 import com.example.apverse.model.*
+import com.example.apverse.ui.librarian.book.LBookFragment
 import com.example.apverse.ui.librarian.book.LBookReservationFragment
 import com.example.apverse.ui.librarian.room.LRoomFragment
 import com.example.apverse.ui.login.LoginFragment
@@ -412,7 +413,12 @@ class FirestoreClass {
 
                     when(fragment){
                         is SBookFragment -> {
-                            Log.i("ApVerse::Firebase", "successLoadBooks()")
+                            Log.i("ApVerse::Firebase", "SBookFragment - successLoadBooks()")
+                            fragment.successLoadBooks(bookList)
+                        }
+
+                        is LBookFragment -> {
+                            Log.i("ApVerse::Firebase", "SBookFragment - successLoadBooks()")
                             fragment.successLoadBooks(bookList)
                         }
                     }
