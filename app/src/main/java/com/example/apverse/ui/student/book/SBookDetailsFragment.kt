@@ -149,6 +149,10 @@ class SBookDetailsFragment : BaseFragment() {
 
     fun successReserveBook(){
         showErrorSnackBar("Book Reserved", false)
+        reload()
     }
 
+    private fun reload() {
+        this.findNavController().navigate(SBookDetailsFragmentDirections.actionSBookDetailsFragmentSelf(args.bookId))
+    }
 }

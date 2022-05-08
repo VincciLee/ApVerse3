@@ -1,6 +1,7 @@
 package com.example.apverse.ui.librarian.book
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -51,6 +52,7 @@ class LBookReservationFragment : BaseFragment() {
     }
 
     fun successUpdateReservation(){
+        Log.i("ApVerse::LFragment", "LBookReservationFragment - successUpdateReservation()")
         showErrorSnackBar("Book has ready and alert sent to the student.", false)
         reload()
     }
@@ -60,6 +62,7 @@ class LBookReservationFragment : BaseFragment() {
     }
 
     fun successDeleteReservation(){
+        Log.i("ApVerse::LFragment", "LBookReservationFragment - successDeleteReservation()")
         showErrorSnackBar("Book reservation has been removed.", false)
         reload()
     }

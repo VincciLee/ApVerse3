@@ -60,5 +60,10 @@
         <argument
             android:name="bookId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_SBookDetailsFragment_self"
+            app:destination="@id/SBookDetailsFragment"
+            app:popUpTo="@id/SBookDetailsFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

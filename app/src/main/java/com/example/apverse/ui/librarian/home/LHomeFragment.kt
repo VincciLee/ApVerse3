@@ -71,7 +71,7 @@ class LHomeFragment : BaseFragment() {
     }
 
     private fun getReservationCount() {
-        FirestoreClass().getReservations(this)
+        FirestoreClass().getReservationCount(this)
     }
 
     fun successGetReservationCount(reservationList: ArrayList<BookReservation>) {

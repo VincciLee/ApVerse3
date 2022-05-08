@@ -581,22 +581,48 @@ class FirestoreClass {
                         if (reservation != null){
                             reservation.doc_id = it.id
                             reservationList.add(reservation)
-                            Log.i("ApVerse::Firestore", reservation.student_name+", "+reservation.reservation_status+", "+reservation.ready)
+                            Log.i("ApVerse::Firestore", reservation.student_name+", "+reservation.book_title+", "+reservation.ready)
                         }
                     }
 
                     when(fragment){
                         is LBookReservationFragment -> {
-                            Log.i("ApVerse::Firebase", "successLoadReservations()")
+                            Log.i("ApVerse::Firebase", "LBookReservationFragment - successLoadReservations()")
                             fragment.successLoadReservation(reservationList)
                         }
 
-                        is LHomeFragment -> {
-                            Log.i("ApVerse::Firebase", "successLoadReservations()")
-                            fragment.successGetReservationCount(reservationList)
-                        }
+//                        is LHomeFragment -> {
+//                            Log.i("ApVerse::Firebase", "LHomeFragment - successLoadReservations()")
+//                            fragment.successGetReservationCount(reservationList)
+//                        }
                     }
                 }
+            }
+    }
+
+    fun getReservationCount(fragment: Fragment) {
+        val reservationList: ArrayList<BookReservation> = ArrayList()
+
+        mFireStore.collection(Constants.BOOK_RESERVATION)
+            .orderBy(Constants.DATE)
+            .orderBy(Constants.TIME)
+            .get()
+            .addOnSuccessListener { document ->
+                for(i in document.documents) {
+                    val reservation = i.toObject(BookReservation::class.java)!!
+                    reservation.doc_id = i.id
+                    reservationList.add(reservation)
+                }
+
+                when (fragment) {
+                    is LHomeFragment -> {
+                        Log.i("ApVerse::Firebase", "Success getReservationCount() ")
+                        fragment.successGetReservationCount(reservationList)
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e("ApVerse::Firebase", "Failed getReservationCount()", e)
             }
     }
 
@@ -685,6 +711,7 @@ class FirestoreClass {
                     }
                 }
                 else{
+                    Log.i("ApVerse::Firestore", "validateReservation() success, turning to updateReservation()")
                     updateReservation(fragment, docId, reservationHashMap)
                 }
             }
@@ -698,7 +725,6 @@ class FirestoreClass {
         docId: String,
         reservationHashMap: HashMap<String, Any>
     ) {
-
         mFireStore.collection(Constants.BOOK_RESERVATION)
             .document(docId)
             .update(reservationHashMap)
@@ -729,13 +755,13 @@ class FirestoreClass {
             .addOnSuccessListener {
                 when(fragment){
                     is LBookReservationFragment ->{
-                        //fragment.hideProgressDialog()
+                        Log.i("ApVerse::Firestore", "Success delete reservation.")
                         fragment.successDeleteReservation()
                     }
                 }
             }
             .addOnFailureListener { e->
-                Log.e(fragment.javaClass.simpleName,"Error deleting subplan",e)
+                Log.e("ApVerse::Firestore","Error deleting reservation",e)
 
                 when(fragment){
                     is LBookReservationFragment ->{

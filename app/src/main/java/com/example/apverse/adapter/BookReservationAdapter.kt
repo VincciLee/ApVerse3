@@ -45,12 +45,20 @@ class BookReservationAdapter(
             val isReady = item.ready
             val name = item.student_name
             val date = item.date
+            var time = item.time
             val reservationHashMap: HashMap<String, Any> = HashMap()
+
+            if (time.substringBefore(":").toInt() < 12) {
+                time = "$time am"
+            }
+            else {
+                time = "$time pm"
+            }
 
             holder.itemView.findViewById<TextView>(R.id.text_reservation_title).text = bookTitle
             holder.itemView.findViewById<TextView>(R.id.text_reservation_id).text = bookId
             holder.itemView.findViewById<TextView>(R.id.text_reservation_name).text = name
-            holder.itemView.findViewById<TextView>(R.id.text_reservation_date).text = date
+            holder.itemView.findViewById<TextView>(R.id.text_reservation_date).text = "$date  $time"
 
             Glide.with(fragment)
                 .load(bookImage)
