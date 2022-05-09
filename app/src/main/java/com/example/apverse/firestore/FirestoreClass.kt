@@ -23,6 +23,7 @@ import com.example.apverse.ui.student.room.SRoomFragment
 import com.example.apverse.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.auth.User
 import java.text.SimpleDateFormat
@@ -179,7 +180,7 @@ class FirestoreClass {
             }
     }
 
-    fun validateRoomBooking(fragment: SRoomBookFragment, roomBookingInfo:RoomBooking){
+    fun validateRoomBooking(fragment: SRoomBookFragment, roomBookingInfo:NewRoomBooking){
         val delim = ":"
         val hour = roomBookingInfo.time.substringBefore(delim)
 
@@ -190,7 +191,7 @@ class FirestoreClass {
         }
     }
 
-    fun createRoomBooking(fragment: SRoomBookFragment, roomBookingInfo:RoomBooking){
+    fun createRoomBooking(fragment: SRoomBookFragment, roomBookingInfo:NewRoomBooking){
         mFireStore.collection(Constants.ROOM_BOOKING)
             .document()
             .set(roomBookingInfo, SetOptions.merge())
@@ -199,6 +200,47 @@ class FirestoreClass {
             }
             .addOnFailureListener { e ->
                 Log.e("ApVerse::Firebase", "Add Room Booking Failed.", e)
+            }
+    }
+
+    fun getMyBookings(fragment: Fragment) {
+        val bookingList: ArrayList<RoomBooking> = ArrayList()
+
+        mFireStore.collection(Constants.ROOM_BOOKING)
+            .whereEqualTo(Constants.STUDENT_EMAIL, getCurrentUserEmail())
+            .orderBy(Constants.DATE)
+            .orderBy(Constants.TIME)
+            .get()
+            .addOnSuccessListener { document ->
+                for (i in document.documents) {
+                    val booking = i.toObject(RoomBooking::class.java)!!
+                    booking.doc_id = i.id
+
+                    val current = Calendar.getInstance().time
+                    val dateFormatter = SimpleDateFormat("yyyy-MM-dd")
+                    val dataDate = booking?.date
+                    val today = dateFormatter.format(current)
+                    val student = booking?.student_name
+
+                    if(dataDate?.compareTo(today)!! >= 0){
+                        bookingList.add(booking)
+                    }
+                }
+
+                when (fragment) {
+                    is SHomeFragment -> {
+                        Log.i("ApVerse::Firebase", "success getMyBookings() = "+bookingList.size.toString())
+                        fragment.successGetMyBookings(bookingList)
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                when (fragment) {
+                    is SHomeFragment -> {
+                        Log.e("ApVerse::Firebase", "Failed getMyBookings()", e)
+                        fragment.failedGetMyBookings()
+                    }
+                }
             }
     }
 
@@ -623,6 +665,37 @@ class FirestoreClass {
             }
             .addOnFailureListener { e ->
                 Log.e("ApVerse::Firebase", "Failed getReservationCount()", e)
+            }
+    }
+
+    fun getMyBookReservations(fragment: Fragment) {
+        val reservationList: ArrayList<BookReservation> = ArrayList()
+
+        mFireStore.collection(Constants.BOOK_RESERVATION)
+            .whereEqualTo(Constants.STUDENT_EMAIL, getCurrentUserEmail())
+            .orderBy(Constants.READY, Query.Direction.DESCENDING)
+            .get()
+            .addOnSuccessListener { document ->
+                for (i in document.documents) {
+                    val reservation = i.toObject(BookReservation::class.java)!!
+                    reservation.doc_id = i.id
+                    reservationList.add(reservation)
+                }
+
+                when (fragment) {
+                    is SHomeFragment -> {
+                        Log.i("ApVerse::Firestore", "Success getMyBookReservations()")
+                        fragment.successGetMyReservations(reservationList)
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                when (fragment) {
+                    is SHomeFragment -> {
+                        Log.e("ApVerse::Firestore", "Failed getMyBookReservations()", e)
+                        fragment.failedGetMyReservations()
+                    }
+                }
             }
     }
 

@@ -13,6 +13,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.apverse.R
 import com.example.apverse.databinding.FragmentSRoomBookBinding
 import com.example.apverse.firestore.FirestoreClass
+import com.example.apverse.model.NewRoomBooking
 import com.example.apverse.model.RoomBooking
 import com.example.apverse.ui.BaseFragment
 import com.example.apverse.ui.DatePickerFragment
@@ -118,7 +119,7 @@ class SRoomBookFragment : BaseFragment() {
         val date = binding.inputDate.editText?.text.toString().trim { it <= ' ' }
         val time = binding.inputTime.editText?.text.toString().trim { it <= ' ' }
 
-        val roomBooking = RoomBooking(
+        val roomBooking = NewRoomBooking(
             args.roomId,
             FirestoreClass().getCurrentUserEmail(),
             name,

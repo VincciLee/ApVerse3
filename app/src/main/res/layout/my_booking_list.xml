@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:orientation="horizontal"
+    app:layout_editor_absoluteX="20dp">
+
+    <TextView
+        android:id="@+id/text_s_home_room"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Room 1"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/text_s_home_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:padding="10dp"
+        android:text="Date, Time"
+        android:textSize="18sp"/>
+
+    <Button
+        android:id="@+id/btn_s_home_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|right"
+        android:layout_marginRight="10dp"
+        android:padding="5dp"
+        android:text="Edit"
+        android:textSize="18sp"/>
+
+</com.google.android.material.card.MaterialCardView>

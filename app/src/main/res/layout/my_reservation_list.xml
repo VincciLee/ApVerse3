@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:orientation="horizontal"
+    app:layout_editor_absoluteX="20dp">
+
+    <TextView
+        android:id="@+id/text_s_home_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:text="Book Title"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/text_s_home_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:padding="15dp"
+        android:text="Status"
+        android:textSize="18sp"
+        android:textStyle="italic"/>
+
+</com.google.android.material.card.MaterialCardView>
