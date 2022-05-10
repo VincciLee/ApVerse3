@@ -36,4 +36,12 @@ class SMyRoomViewModel: ViewModel() {
             allBookingList.add(booking)
         }
     }
+
+    suspend fun deleteMyBooking(docId: String) : Boolean{
+        return Firestore().deleteMyBooking(docId)
+    }
+
+    suspend fun editMyBooking(docId: String, hashMap: HashMap<String, Any>) : Boolean{
+        return Firestore().editMyBooking(docId, hashMap)
+    }
 }

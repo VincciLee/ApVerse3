@@ -34,6 +34,19 @@ class Firestore {
         }
     }
 
+    suspend fun getAllBookings() : QuerySnapshot?{
+
+        return try {
+            val data = mFireStore.collection(Constants.ROOM_BOOKING)
+                .get()
+                .await()
+            data
+        }
+        catch (e: Exception) {
+            null
+        }
+    }
+
     suspend fun getMyRoomBookingInfo(docId: String) : DocumentSnapshot?{
 
         return try {
@@ -48,16 +61,33 @@ class Firestore {
         }
     }
 
-    suspend fun getAllBookings() : QuerySnapshot?{
+    suspend fun editMyBooking(
+        docId: String,
+        hashMap: HashMap<String, Any>
+    ) : Boolean {
+        return try {
+            val data = mFireStore.collection(Constants.ROOM_BOOKING)
+                .document(docId)
+                .update(hashMap)
+                .await()
+            true
+        }
+        catch (e: Exception) {
+            false
+        }
+    }
+
+    suspend fun deleteMyBooking(docId: String) : Boolean {
 
         return try {
             val data = mFireStore.collection(Constants.ROOM_BOOKING)
-                .get()
+                .document(docId)
+                .delete()
                 .await()
-            data
+            true
         }
         catch (e: Exception) {
-            null
+            false
         }
     }
 }

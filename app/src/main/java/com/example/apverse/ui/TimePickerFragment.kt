@@ -10,13 +10,24 @@ import androidx.fragment.app.setFragmentResult
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TimePickerFragment: DialogFragment(), TimePickerDialog.OnTimeSetListener {
+class TimePickerFragment(private val time: String = ""): DialogFragment(),
+    TimePickerDialog.OnTimeSetListener
+{
     private val calendar = Calendar.getInstance()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         // default time
-        val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
+        var hour: Int = 0
+        var minute: Int = 0
+
+        if (time == "") {
+            hour = calendar.get(Calendar.HOUR_OF_DAY)
+            minute = calendar.get(Calendar.MINUTE)
+        }
+        else {
+            hour = time.substringBefore(":").toInt()
+            minute = time.substringAfter(":").toInt()
+        }
 
         // return new TimePickerDialog instance
         return TimePickerDialog(requireActivity(), this, hour, minute, true)
