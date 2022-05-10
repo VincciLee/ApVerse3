@@ -7,17 +7,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apverse.MainActivity
 import com.example.apverse.R
 import com.example.apverse.adapter.ComputerAdapter
 import com.example.apverse.databinding.FragmentSComputerBinding
+import com.example.apverse.firestore.Firestore
 import com.example.apverse.firestore.FirestoreClass
 import com.example.apverse.model.Computers
 import com.example.apverse.model.Rooms
 import com.example.apverse.ui.BaseFragment
 import com.example.apverse.utils.Constants
+import kotlinx.coroutines.launch
 
 class SComputerFragment : BaseFragment() {
 
@@ -25,7 +28,7 @@ class SComputerFragment : BaseFragment() {
 //        fun newInstance() = SComputerFragment()
 //    }
 //
-//    private lateinit var viewModel: SComputerViewModel
+    private lateinit var viewModel: SComputerViewModel
 
     private var _binding: FragmentSComputerBinding? = null
     private val binding get() = _binding!!
@@ -34,6 +37,7 @@ class SComputerFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        viewModel = ViewModelProvider(this).get(SComputerViewModel::class.java)
 
         _binding = FragmentSComputerBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -43,16 +47,21 @@ class SComputerFragment : BaseFragment() {
 
         (requireActivity() as MainActivity).supportActionBar?.title = "Library Computer"
 
-//        viewModel = ViewModelProvider(this).get(SComputerViewModel::class.java)
-
-        loadComputers()
+        viewLifecycleOwner.lifecycleScope.launch {
+            loadComputers()
+        }
 
         return root
     }
 
-    fun loadComputers(){
+    suspend fun loadComputers(){
         showProgressDialog()
-        FirestoreClass().getComputers(this)
+//        FirestoreClass().getComputers(this)
+        viewModel.getComputerList()
+        val computerList = viewModel.computerList
+        val isUsing = viewModel.isUsing
+
+        successLoadComputers(computerList, isUsing)
     }
 
     fun successLoadComputers(myComputers: ArrayList<Computers>, isUsing: Boolean){
@@ -62,8 +71,15 @@ class SComputerFragment : BaseFragment() {
         recyclerView.setHasFixedSize(true)
     }
 
-    fun updateComputerStatus(computerHashmap: HashMap<String,Any>, checkingHashMap: HashMap<String,Any>){
-        FirestoreClass().getDocumentId(this, Constants.COMPUTERS, computerHashmap, checkingHashMap)
+    suspend fun updateComputerStatus(docId: String, hashMap: HashMap<String, Any>){
+        val result = viewModel.updateComputerStatus(docId, hashMap)
+
+        if (result) {
+            successUpdateComputerStatus()
+        }
+        else {
+            failedUpdateComputerStatus()
+        }
     }
 
     fun successUpdateComputerStatus(){

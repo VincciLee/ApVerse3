@@ -6,13 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apverse.R
+import com.example.apverse.firestore.Firestore
 import com.example.apverse.firestore.FirestoreClass
 import com.example.apverse.model.Computers
 import com.example.apverse.ui.student.computer.SComputerFragment
 import com.example.apverse.utils.Constants
 import com.google.android.material.button.MaterialButton
+import kotlinx.coroutines.launch
 
 class ComputerAdapter(
         private val fragment: SComputerFragment,
@@ -76,17 +79,22 @@ class ComputerAdapter(
                          computerHashmap[Constants.COMPUTER_STATUS] = Constants.FREE
                          computerHashmap[Constants.STUDENT_EMAIL] = ""
 
-                         checkingHashMap[Constants.STUDENT_EMAIL] = FirestoreClass().getCurrentUserEmail()
+//                         checkingHashMap[Constants.STUDENT_EMAIL] = FirestoreClass().getCurrentUserEmail()
                      }
                  }else{
                      Log.i("ApVerse::CompAdapter", "isUsing == false")
                      computerHashmap[Constants.COMPUTER_STATUS] = Constants.IN_USE
                      computerHashmap[Constants.STUDENT_EMAIL] = FirestoreClass().getCurrentUserEmail()
 
-                     checkingHashMap[Constants.COMPUTER_ID] = computerId
+//                     checkingHashMap[Constants.COMPUTER_ID] = computerId
                  }
 
-                 FirestoreClass().updateComputerStatus(fragment, computerHashmap, docId)
+                 fragment.viewLifecycleOwner.lifecycleScope.launch {
+                     fragment.updateComputerStatus(docId, computerHashmap)
+                 }
+
+//                 Firestore().get
+//                 FirestoreClass().updateComputerStatus(fragment, computerHashmap, docId)
 //                 FirestoreClass().getDocumentId(fragment, Constants.COMPUTERS, computerHashmap, checkingHashMap)
              }
          }
