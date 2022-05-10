@@ -3,11 +3,14 @@ package com.example.apverse.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apverse.R
 import com.example.apverse.model.RoomBooking
 import com.example.apverse.ui.student.home.SHomeFragment
+import com.example.apverse.ui.student.home.SHomeFragmentDirections
 
 class MyBookingAdapter(
     private val fragment: SHomeFragment,
@@ -45,6 +48,9 @@ class MyBookingAdapter(
             holder.itemView.findViewById<TextView>(R.id.text_s_home_room).text = "Room $roomId"
             holder.itemView.findViewById<TextView>(R.id.text_s_home_date).text = "$date  $time"
 
+            holder.itemView.findViewById<Button>(R.id.btn_s_home_edit).setOnClickListener { root ->
+                fragment.findNavController().navigate(SHomeFragmentDirections.actionNavSHomeToSMyRoomFragment(docId, roomId))
+            }
         }
     }
 

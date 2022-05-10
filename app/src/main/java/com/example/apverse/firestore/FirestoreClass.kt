@@ -22,10 +22,9 @@ import com.example.apverse.ui.student.room.SRoomBookFragment
 import com.example.apverse.ui.student.room.SRoomFragment
 import com.example.apverse.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.*
 import com.google.firebase.firestore.auth.User
+import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
@@ -365,6 +364,34 @@ class FirestoreClass {
             .addOnFailureListener { e ->
                 Log.e("ApVerse::Firebase", "getBookingCount() Failed.", e)
             }
+    }
+
+    suspend fun getMyRoomBookingInfo(docId: String) : DocumentSnapshot?{
+
+        return try {
+            val data = mFireStore.collection(Constants.ROOM_BOOKING)
+                        .document(docId)
+                        .get()
+                        .await()
+            data
+        }
+        catch (e: Exception) {
+            null
+        }
+    }
+
+    suspend fun getAllBookings() : QuerySnapshot?{
+
+        return try {
+            val data = mFireStore.collection(Constants.ROOM_BOOKING)
+//                .document()
+                .get()
+                .await()
+            data
+        }
+        catch (e: Exception) {
+            null
+        }
     }
 
     fun getComputers(fragment: Fragment) {
