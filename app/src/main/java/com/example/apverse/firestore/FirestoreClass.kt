@@ -384,7 +384,6 @@ class FirestoreClass {
 
         return try {
             val data = mFireStore.collection(Constants.ROOM_BOOKING)
-//                .document()
                 .get()
                 .await()
             data

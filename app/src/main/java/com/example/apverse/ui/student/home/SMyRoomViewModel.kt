@@ -2,6 +2,7 @@ package com.example.apverse.ui.student.home
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.example.apverse.firestore.Firestore
 import com.example.apverse.firestore.FirestoreClass
 import com.example.apverse.model.RoomBooking
 import com.example.apverse.model.Rooms
@@ -14,18 +15,22 @@ class SMyRoomViewModel: ViewModel() {
     var myBookingInfo: RoomBooking = RoomBooking()
     var allBookingList: ArrayList<RoomBooking> = ArrayList()
 
+    suspend fun getMyRoomDetails(roomId: String) {
+        val data = Firestore().getRoomDetails(roomId)
+        for (i in data?.documents!!){
+            val room = i?.toObject(Rooms::class.java)!!
+            myRoomDetails.add(room)
+        }
+    }
+
     suspend fun getMyRoomBookingInfo(docId: String) {
-//        val data =  FirestoreClass().mFireStore.collection(Constants.ROOM_BOOKING)
-//                        .document(docId)
-//                        .get()
-//                        .await()
-        val data = FirestoreClass().getMyRoomBookingInfo(docId)
+        val data = Firestore().getMyRoomBookingInfo(docId)
         myBookingInfo = data?.toObject(RoomBooking::class.java)!!
         Log.i("ApVerse::SMyRoomVM", "getMyRoomBookingInfo() = Room "+myBookingInfo.room_id)
     }
 
     suspend fun getAllBookings() {
-        val data = FirestoreClass().getAllBookings()
+        val data = Firestore().getAllBookings()
         for (i in data?.documents!!){
             val booking = i?.toObject(RoomBooking::class.java)!!
             allBookingList.add(booking)

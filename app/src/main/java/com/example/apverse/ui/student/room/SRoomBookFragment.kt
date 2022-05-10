@@ -85,10 +85,6 @@ class SRoomBookFragment : BaseFragment() {
         }
 
         binding.btnBookRoom.setOnClickListener {
-
-        }
-
-        binding.btnBookRoom.setOnClickListener {
             saveBookingDetails()
         }
 
