@@ -8,26 +8,26 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_s_home"
-            android:icon="@drawable/home"
+            android:icon="@drawable/ic_baseline_home_24"
             android:title="@string/menu_home" />
         <item
             android:id="@+id/nav_s_room"
-            android:icon="@drawable/room"
+            android:icon="@drawable/ic_baseline_people_24"
             android:title="@string/menu_room" />
         <item
             android:id="@+id/nav_s_book"
-            android:icon="@drawable/book"
+            android:icon="@drawable/ic_baseline_menu_book_24"
             android:title="@string/menu_book"/>
         <item
             android:id="@+id/nav_s_computer"
-            android:icon="@drawable/computer"
+            android:icon="@drawable/ic_baseline_laptop_chromebook_24"
             android:title="@string/menu_computer" />
     </group>
 
     <group android:id="@+id/group2">
         <item
             android:id="@+id/nav_logout"
-            android:icon="@drawable/logout"
+            android:icon="@drawable/ic_baseline_exit_to_app_24"
             android:title="@string/logout" />
     </group>
 </menu>

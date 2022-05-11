@@ -51,6 +51,9 @@ class SMyRoomFragment : BaseFragment() {
 //            }
         }
 
+//        binding.btnSMyDate.iconTint = Icons.Filled.CalendarToday
+//        binding.btnSMyDate.icon = Icons.Filled.CalendarToday
+
         binding.btnSMyDate.setOnClickListener {
             val date = binding.inputSMyDate.editText?.text.toString().trim { it <= ' ' }
             setDate(date)
@@ -180,24 +183,24 @@ class SMyRoomFragment : BaseFragment() {
             viewLifecycleOwner
         ){
                 resultKey, bundle -> if (resultKey == "REQUEST_KEY") {
-            val time = bundle.getString("SELECTED_TIME")
+                    val time = bundle.getString("SELECTED_TIME")
 
-            binding.inputSMyTime.editText?.setText(time)
-        }
+                    binding.inputSMyTime.editText?.setText(time)
+                }
         }
 
         timePickerFragment.show(supportFragmentManager, "TimePickerFragment")
     }
 
-    suspend fun showAllBookings() {
-        viewModel.getAllBookings()
-        val allBookings = viewModel.allBookingList
-        var text = ""
-
-        for(i in allBookings) {
-            text = text + "Room " + i.room_id + ", " + i.student_name + ", " + i.date + "\n"
-        }
-
-//        binding.textSHomeTest.text = text
-    }
+//    suspend fun showAllBookings() {
+//        viewModel.getAllBookings()
+//        val allBookings = viewModel.allBookingList
+//        var text = ""
+//
+//        for(i in allBookings) {
+//            text = text + "Room " + i.room_id + ", " + i.student_name + ", " + i.date + "\n"
+//        }
+//
+////        binding.textSHomeTest.text = text
+//    }
 }
