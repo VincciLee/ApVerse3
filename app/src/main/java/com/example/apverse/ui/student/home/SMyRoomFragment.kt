@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.whenCreated
 import androidx.lifecycle.whenResumed
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -44,9 +45,9 @@ class SMyRoomFragment : BaseFragment() {
         (requireActivity() as MainActivity).supportActionBar?.title = "Room Booking"
 
         viewLifecycleOwner.lifecycleScope.launch {
-//            whenResumed {
             showMyRoomsDetails()
             showMyRoomBookingInfo()
+//            whenResumed {
 //                showAllBookings()
 //            }
         }

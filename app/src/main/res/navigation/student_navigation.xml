@@ -46,6 +46,9 @@
         <action
             android:id="@+id/action_nav_s_book_to_SBookDetailsFragment"
             app:destination="@id/SBookDetailsFragment" />
+        <action
+            android:id="@+id/action_nav_s_book_self"
+            app:destination="@id/nav_s_book" />
     </fragment>
     <fragment
         android:id="@+id/nav_s_computer"

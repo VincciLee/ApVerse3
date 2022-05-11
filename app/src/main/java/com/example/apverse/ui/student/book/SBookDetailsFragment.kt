@@ -1,5 +1,6 @@
 package com.example.apverse.ui.student.book
 
+import android.app.AlertDialog
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,6 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +21,7 @@ import com.example.apverse.MainActivity
 import com.example.apverse.R
 import com.example.apverse.adapter.BookDetailsAdapter
 import com.example.apverse.databinding.FragmentSBookDetailsBinding
+import com.example.apverse.firestore.Firestore
 import com.example.apverse.firestore.FirestoreClass
 import com.example.apverse.model.BookReservation
 import com.example.apverse.model.Books
@@ -25,6 +30,7 @@ import com.example.apverse.model.Users
 import com.example.apverse.ui.BaseFragment
 import com.google.firebase.firestore.auth.User
 import com.google.type.DateTime
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -36,36 +42,75 @@ class SBookDetailsFragment : BaseFragment() {
     private var _binding: FragmentSBookDetailsBinding? = null
     private val binding get() = _binding!!
     private val args: SBookDetailsFragmentArgs by navArgs()
+    private lateinit var viewModel: SBookDetailsViewModel
 
-    private var bookTitle: String = ""
-    private var bookImage: String = ""
+//    private var bookTitle: String = ""
+//    private var bookImage: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        viewModel = ViewModelProvider(this).get(SBookDetailsViewModel::class.java)
+
         _binding = FragmentSBookDetailsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         (requireActivity() as MainActivity).supportActionBar?.title = "Book Details"
 
-        // Show book info
-        getBookDetails(args.bookId)
+        viewLifecycleOwner.lifecycleScope.launch {
+            // Show book info
+            getBookDetails()
 
-        // Show reservation list
-        loadReservation(args.bookId)
+            // Show reservation list
+            loadReservation()
+
+            // Get user info
+            viewModel.getUserInfo()
+        }
 
         // Reserve Book function
         binding.btnReserve.setOnClickListener{
-            FirestoreClass().getUserDetails(this)
+            val userInfo = viewModel.userInfo
+            val bookInfo = viewModel.bookInfo
+            val hasReservation = viewModel.hasReservation
+            val myDocId = viewModel.myReservationId
+
+            if(hasReservation == false) {
+                // Reserve book
+//                FirestoreClass().getUserDetails(this)
+                viewLifecycleOwner.lifecycleScope.launch {
+                    reserveBook(userInfo, bookInfo)
+                }
+            }
+            else{
+                // Cancel book reservation
+                val builder = AlertDialog.Builder(this.context)
+                builder.setMessage("Are you sure you want to cancel the book reservation?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes") { dialog, id ->
+                        viewLifecycleOwner.lifecycleScope.launch {
+                            deleteMyReservation()
+                        }
+                    }
+                    .setNegativeButton("No") { dialog, id ->
+                        dialog.dismiss()
+                    }
+                val alert = builder.create()
+                alert.show()
+            }
         }
 
         return root
     }
 
-    private fun getBookDetails(bookId: String){
+    private suspend fun getBookDetails(){
         showProgressDialog()
-        FirestoreClass().getBookDetails(this, bookId)
+//        FirestoreClass().getBookDetails(this, bookId)
+        viewModel.getBookDetails(args.bookId)
+        val bookInfo = viewModel.bookInfo
+        showBookDetails(bookInfo)
     }
 
     fun showBookDetails(book: Books){
@@ -75,11 +120,11 @@ class SBookDetailsFragment : BaseFragment() {
         binding.textSBookDetailsAuthor.text = book.book_author
         binding.textSBookDetailsYear.text = book.book_year
 
-        bookTitle = book.book_title
-        bookImage = book.book_image
+//        bookTitle = book.book_title
+//        bookImage = book.book_image
 
         Glide.with(this)
-            .load(bookImage)
+            .load(book.book_image)
             .apply(
                 RequestOptions.placeholderOf(R.drawable.unknown)
                 .override(80,80))
@@ -91,17 +136,24 @@ class SBookDetailsFragment : BaseFragment() {
         showErrorSnackBar("Unable to get the book details.", true)
     }
 
-    fun loadReservation(bookId: String){
+    suspend fun loadReservation(){
 //        showProgressDialog()
-        FirestoreClass().getBookReservation(this, bookId)
+//        FirestoreClass().getBookReservation(this, bookId)
+        viewModel.getBookReservation(args.bookId)
+        val reservationList = viewModel.reservationList
+        val hasReservation = viewModel.hasReservation
+
+        successLoadReservation(reservationList, hasReservation)
     }
 
-    fun successLoadReservation(myReservations: ArrayList<BookReservation>, hasReservation: Int) {
+    fun successLoadReservation(myReservations: ArrayList<BookReservation>, hasReservation: Boolean) {
 //        hideProgressDialog()
 
-        if(hasReservation > 0) {
-            binding.btnReserve.text = "Reserved"
-            binding.btnReserve.isEnabled = false
+        if(hasReservation == true) {
+            binding.btnReserve.text = "Cancel"
+            binding.btnReserve.backgroundTintList = (ContextCompat.getColorStateList((requireActivity() as MainActivity), R.color.dark_red))
+//            binding.btnReserve.text = "Reserved"
+//            binding.btnReserve.isEnabled = false
         }
 
         val recyclerView = binding.root.findViewById<RecyclerView>(R.id.rv_s_book_details)
@@ -109,21 +161,11 @@ class SBookDetailsFragment : BaseFragment() {
         recyclerView.setHasFixedSize(true)
     }
 
-    fun reserveBook(myUser: Users){
+    suspend fun reserveBook(myUser: Users, myBook: Books){
         val bookId = args.bookId
         val status = "Reserved"
         val email = myUser.user_email
         val name = myUser.user_name
-
-//        val c = Calendar.getInstance()
-//        val year = c.get(Calendar.YEAR)
-//        val month = c.get(Calendar.MONTH)
-//        val day = c.get(Calendar.DAY_OF_MONTH)
-//        val hour = c.get(Calendar.HOUR_OF_DAY)
-//        val minute = c.get(Calendar.MINUTE)
-
-//        val date = "$year-$month-$day"
-//        val time = "$hour:$minute"
 
         val current = Calendar.getInstance().time
         val dateFormatter = SimpleDateFormat("yyyy-MM-dd")
@@ -134,8 +176,8 @@ class SBookDetailsFragment : BaseFragment() {
 
         val reservation = NewBookReservation(
             bookId,
-            bookImage,
-            bookTitle,
+            myBook.book_image,
+            myBook.book_title,
             date,
             false,
             status,
@@ -144,12 +186,36 @@ class SBookDetailsFragment : BaseFragment() {
             time
         )
 
-        FirestoreClass().reserveBook(this, reservation)
+//        FirestoreClass().reserveBook(this, reservation)
+        val result = viewModel.reserveBook(reservation)
+
+        if(result) {
+            successReserveBook()
+        }
+        else {
+            failedReserveBook()
+        }
     }
 
     fun successReserveBook(){
         showErrorSnackBar("Book Reserved", false)
         reload()
+    }
+
+    fun failedReserveBook(){
+        showErrorSnackBar("Book Reservation failed.", true)
+    }
+
+    suspend fun deleteMyReservation() {
+        val result = viewModel.deleteMyReservation()
+
+        if(result) {
+            showErrorSnackBar("Book reservation cancelled.", false)
+            reload()
+        }
+        else {
+            showErrorSnackBar("Book reservation cancellation failed..", true)
+        }
     }
 
     private fun reload() {

@@ -19,6 +19,8 @@ class SHomeViewModel : ViewModel() {
     var reservationList: ArrayList<BookReservation> = ArrayList()
 
     suspend fun getComputerList() {
+        computerList.clear()
+
         val data = Firestore().getFreeComputerList()
         for (i in data?.documents!!){
             val computer = i?.toObject(Computers::class.java)!!
@@ -27,6 +29,8 @@ class SHomeViewModel : ViewModel() {
     }
 
     suspend fun getBookingList() {
+        bookingList.clear()
+
         val data = Firestore().getMyRoomBookingList()
         for (i in data?.documents!!){
             val booking = i?.toObject(RoomBooking::class.java)!!
@@ -44,6 +48,8 @@ class SHomeViewModel : ViewModel() {
     }
 
     suspend fun getReservationList() {
+        reservationList.clear()
+
         val data = Firestore().getMyReservationList()
         for (i in data?.documents!!){
             val reservation = i?.toObject(BookReservation::class.java)!!

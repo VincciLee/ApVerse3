@@ -56,8 +56,9 @@ class FirestoreClass {
                 }
 
                 when (fragment) {
-                    is SBookDetailsFragment ->
-                        fragment.reserveBook(user)
+                    is SBookDetailsFragment -> {
+//                        fragment.reserveBook(user)
+                    }
                 }
 
                 if(documents == null){
@@ -727,7 +728,7 @@ class FirestoreClass {
 
     fun getBookReservation(fragment: Fragment, bookId: String) {
         val reservationList: ArrayList<BookReservation> = ArrayList()
-        var hasReservation: Int = 0
+        var hasReservation: Boolean = false
 
         mFireStore.collection(Constants.BOOK_RESERVATION)
             .whereEqualTo(Constants.BOOK_ID, bookId)
@@ -751,7 +752,7 @@ class FirestoreClass {
                             Log.i("ApVerse::Firestore", reservation.student_name+", "+reservation.reservation_status+", "+reservation.ready)
 
                             if(reservation.student_email == getCurrentUserEmail()){
-                                hasReservation += 1
+                                hasReservation = true
                             }
                         }
                     }

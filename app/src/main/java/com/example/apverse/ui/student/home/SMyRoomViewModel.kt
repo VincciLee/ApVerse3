@@ -16,6 +16,8 @@ class SMyRoomViewModel: ViewModel() {
     var allBookingList: ArrayList<RoomBooking> = ArrayList()
 
     suspend fun getMyRoomDetails(roomId: String) {
+        myRoomDetails.clear()
+
         val data = Firestore().getRoomDetails(roomId)
         for (i in data?.documents!!){
             val room = i?.toObject(Rooms::class.java)!!
@@ -30,6 +32,8 @@ class SMyRoomViewModel: ViewModel() {
     }
 
     suspend fun getAllBookings() {
+        allBookingList.clear()
+
         val data = Firestore().getAllBookings()
         for (i in data?.documents!!){
             val booking = i?.toObject(RoomBooking::class.java)!!

@@ -1,11 +1,9 @@
 package com.example.apverse.firestore
 
+import com.example.apverse.model.NewBookReservation
 import com.example.apverse.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.*
 import kotlinx.coroutines.tasks.await
 
 class Firestore {
@@ -19,6 +17,32 @@ class Firestore {
             email = User.email.toString()
         }
         return email
+    }
+
+    suspend fun getUserInfo() : QuerySnapshot?{
+        return try {
+            val data = mFireStore.collection(Constants.USERS)
+                .whereEqualTo(Constants.USER_EMAIL, getCurrentUserEmail())
+                .get()
+                .await()
+            data
+        }
+        catch (e: Exception) {
+            null
+        }
+    }
+
+    suspend fun getRoomList() : QuerySnapshot?{
+        return try {
+            val data = mFireStore.collection(Constants.ROOMS)
+                .orderBy(Constants.ROOM_ID)
+                .get()
+                .await()
+            data
+        }
+        catch (e: Exception) {
+            null
+        }
     }
 
     suspend fun getRoomDetails(roomId: String) : QuerySnapshot?{
@@ -103,6 +127,46 @@ class Firestore {
         }
     }
 
+    suspend fun getBookList(): QuerySnapshot?{
+        return try {
+            val data = mFireStore.collection(Constants.BOOKS)
+                .orderBy(Constants.BOOK_TITLE)
+                .get()
+                .await()
+            data
+        }
+        catch (e: Exception) {
+            null
+        }
+    }
+
+    suspend fun getBookDetails(bookId: String) : QuerySnapshot?{
+        return try {
+            val data = mFireStore.collection(Constants.BOOKS)
+                .whereEqualTo(Constants.BOOK_ID, bookId)
+                .get()
+                .await()
+            data
+        }
+        catch (e: Exception) {
+            null
+        }
+    }
+
+    suspend fun getBookReservation(bookId: String) : QuerySnapshot?{
+        return try {
+            val data = mFireStore.collection(Constants.BOOK_RESERVATION)
+                .whereEqualTo(Constants.BOOK_ID, bookId)
+                .orderBy(Constants.DATE)
+                .get()
+                .await()
+            data
+        }
+        catch (e: Exception) {
+            null
+        }
+    }
+
     suspend fun getMyReservationList() : QuerySnapshot?{
         return try {
             val data = mFireStore.collection(Constants.BOOK_RESERVATION)
@@ -114,6 +178,32 @@ class Firestore {
         }
         catch (e: Exception) {
             null
+        }
+    }
+
+    suspend fun reserveBook(reservationInfo: NewBookReservation) : Boolean {
+        return try {
+            val data = mFireStore.collection(Constants.BOOK_RESERVATION)
+                .document()
+                .set(reservationInfo, SetOptions.merge())
+                .await()
+            true
+        }
+        catch (e: Exception) {
+            false
+        }
+    }
+
+    suspend fun deleteMyReservation(docId: String) : Boolean {
+        return try {
+            val data = mFireStore.collection(Constants.BOOK_RESERVATION)
+                .document(docId)
+                .delete()
+                .await()
+            true
+        }
+        catch (e: Exception) {
+            false
         }
     }
 

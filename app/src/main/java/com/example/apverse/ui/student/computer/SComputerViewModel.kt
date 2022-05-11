@@ -12,6 +12,8 @@ class SComputerViewModel: ViewModel() {
     var isUsing: Boolean = false
 
     suspend fun getComputerList() {
+        computerList.clear()
+
         val data = Firestore().getComputerList()
         for (i in data?.documents!!){
             val computer = i?.toObject(Computers::class.java)!!

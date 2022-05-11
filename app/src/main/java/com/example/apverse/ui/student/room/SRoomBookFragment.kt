@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.apverse.R
@@ -18,6 +20,7 @@ import com.example.apverse.model.RoomBooking
 import com.example.apverse.ui.BaseFragment
 import com.example.apverse.ui.DatePickerFragment
 import com.example.apverse.ui.TimePickerFragment
+import kotlinx.coroutines.launch
 import java.util.*
 
 class SRoomBookFragment : BaseFragment() {
@@ -25,6 +28,7 @@ class SRoomBookFragment : BaseFragment() {
     private var _binding: FragmentSRoomBookBinding? = null
     private val binding get() = _binding!!
     private val args: SRoomBookFragmentArgs by navArgs()
+    private lateinit var viewModel: SRoomBookViewModel
 
 //    companion object {
 //        private const val ROOM_ID = "room_id"
@@ -42,11 +46,14 @@ class SRoomBookFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        viewModel = ViewModelProvider(this).get(SRoomBookViewModel::class.java)
+
         _binding = FragmentSRoomBookBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        binding.textRoomId.text = "Discussion Room : "+args.roomId
-        binding.textCapacity.text = "Capacity : "+args.capacity
+        viewLifecycleOwner.lifecycleScope.launch {
+            setTextValue()
+        }
 
         binding.btnDate.setOnClickListener {
             val datePickerFragment = DatePickerFragment()
@@ -88,25 +95,18 @@ class SRoomBookFragment : BaseFragment() {
             saveBookingDetails()
         }
 
-//        val c = Calendar.getInstance()
-//        val year = c.get(Calendar.YEAR)
-//        val month = c.get(Calendar.MONTH)
-//        val day = c.get(Calendar.DAY_OF_MONTH)
-//
-//        binding.btnDate.setOnClickListener {
-//            val datePickerDialog = DatePickerDialog.newInstance(DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-//
-//                // do something here
-//            }, year, month, day)
-//
-//            datePickerDialog.show()
-//
-//             Another method
-//            val datePickerFragment = DatePickerFragment()
-//            val supportFragmentManager = activity?.supportFragmentManager
-//        }
-
         return root
+    }
+
+    suspend fun setTextValue() {
+        viewModel.getUserInfo()
+        val name = viewModel.userInfo.user_name
+        val tpNumber = viewModel.userTp+viewModel.userNum
+
+        binding.textRoomId.text = "Discussion Room : "+args.roomId
+        binding.textCapacity.text = "Capacity : "+args.capacity
+        binding.inputStudentName.editText?.setText(name)
+        binding.inputStudentTp.editText?.setText(tpNumber)
     }
 
     private fun saveBookingDetails(): Boolean{
