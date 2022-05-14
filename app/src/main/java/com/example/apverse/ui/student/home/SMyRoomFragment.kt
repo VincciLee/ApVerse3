@@ -132,15 +132,14 @@ class SMyRoomFragment : BaseFragment() {
         bookingHashMap[Constants.TIME] = time
         bookingHashMap[Constants.HDMI_CABLE] = hasHdmi
 
-        val result = viewModel.editMyBooking(args.docId, bookingHashMap)
+        val result = viewModel.validateRoomBooking(args.docId, args.roomId, bookingHashMap)
 
         if(result) {
             showErrorSnackBar("Room booking updated.", false)
             this.findNavController().navigate(SMyRoomFragmentDirections.actionSMyRoomFragmentToNavSHome())
         }
         else{
-            showErrorSnackBar("Failed to update room booking.", true)
-            this.findNavController().navigate(SMyRoomFragmentDirections.actionSMyRoomFragmentToNavSHome())
+            showErrorSnackBar(viewModel.errorMessage, true)
         }
     }
 

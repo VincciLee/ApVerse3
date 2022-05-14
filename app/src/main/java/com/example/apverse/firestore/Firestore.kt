@@ -1,6 +1,7 @@
 package com.example.apverse.firestore
 
 import com.example.apverse.model.NewBookReservation
+import com.example.apverse.model.NewRoomBooking
 import com.example.apverse.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
@@ -70,6 +71,20 @@ class Firestore {
         }
     }
 
+    suspend fun getSelectedRoomBookings(roomId: String, date: String) : QuerySnapshot?{
+        return try {
+            val data = mFireStore.collection(Constants.ROOM_BOOKING)
+                .whereEqualTo(Constants.ROOM_ID, roomId)
+                .whereEqualTo(Constants.DATE, date)
+                .get()
+                .await()
+            data
+        }
+        catch (e: Exception) {
+            null
+        }
+    }
+
     suspend fun getMyRoomBookingList() : QuerySnapshot?{
         return try {
             val data = mFireStore.collection(Constants.ROOM_BOOKING)
@@ -95,6 +110,19 @@ class Firestore {
         }
         catch (e: Exception) {
             null
+        }
+    }
+
+    suspend fun createRoomBooking(roomBooking: NewRoomBooking) : Boolean {
+        return try {
+            val data = mFireStore.collection(Constants.ROOM_BOOKING)
+                .document()
+                .set(roomBooking, SetOptions.merge())
+                .await()
+            true
+        }
+        catch (e: Exception) {
+            false
         }
     }
 

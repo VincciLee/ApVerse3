@@ -56,7 +56,8 @@ class SRoomBookFragment : BaseFragment() {
         }
 
         binding.btnDate.setOnClickListener {
-            val datePickerFragment = DatePickerFragment()
+            val date = binding.inputDate.editText?.text.toString().trim { it <= ' ' }
+            val datePickerFragment = DatePickerFragment(date)
             val supportFragmentManager = requireActivity().supportFragmentManager
 
             supportFragmentManager.setFragmentResultListener(
@@ -74,7 +75,8 @@ class SRoomBookFragment : BaseFragment() {
         }
 
         binding.btnTime.setOnClickListener {
-            val timePickerFragment = TimePickerFragment()
+            val time = binding.inputTime.editText?.text.toString().trim { it <= ' ' }
+            val timePickerFragment = TimePickerFragment(time)
             val supportFragmentManager = requireActivity().supportFragmentManager
 
             supportFragmentManager.setFragmentResultListener(
@@ -92,7 +94,9 @@ class SRoomBookFragment : BaseFragment() {
         }
 
         binding.btnBookRoom.setOnClickListener {
-            saveBookingDetails()
+            viewLifecycleOwner.lifecycleScope.launch {
+                saveBookingDetails()
+            }
         }
 
         return root
@@ -109,7 +113,10 @@ class SRoomBookFragment : BaseFragment() {
         binding.inputStudentTp.editText?.setText(tpNumber)
     }
 
-    private fun saveBookingDetails(): Boolean{
+//    private suspend fun saveBookingDetails(): Boolean{
+    private suspend fun saveBookingDetails() {
+        Log.i("ApVerse::SRoomBookFrag", "saveBookingDetails()")
+
         val name = binding.inputStudentName.editText?.text.toString().trim { it <= ' ' }
         val tp = binding.inputStudentTp.editText?.text.toString().trim { it <= ' ' }
         val date = binding.inputDate.editText?.text.toString().trim { it <= ' ' }
@@ -125,28 +132,55 @@ class SRoomBookFragment : BaseFragment() {
             binding.checkedHdmi.isChecked
         )
 
-        return when{
+        when{
             TextUtils.isEmpty(name) -> {
                 showErrorSnackBar("Please do not leave the name field blank", true)
-                true
             }
             TextUtils.isEmpty(tp) -> {
                 showErrorSnackBar("Please do not leave the tp field blank", true)
-                true
             }
             TextUtils.isEmpty(date) -> {
                 showErrorSnackBar("Please do not leave the date field blank", true)
-                true
             }
             TextUtils.isEmpty(time) -> {
                 showErrorSnackBar("Please do not leave the time field blank", true)
-                true
             }
             else -> {
-                FirestoreClass().validateRoomBooking(this, roomBooking)
-                false
+//                FirestoreClass().validateRoomBooking(this, roomBooking)
+                val result = viewModel.validateRoomBooking(roomBooking)
+
+                if(result) {
+                    saveRoomBookingSuccess()
+                }
+                else {
+                    showErrorSnackBar(viewModel.errorMessage, true)
+                }
             }
         }
+
+//        return when{
+//            TextUtils.isEmpty(name) -> {
+//                showErrorSnackBar("Please do not leave the name field blank", true)
+//                true
+//            }
+//            TextUtils.isEmpty(tp) -> {
+//                showErrorSnackBar("Please do not leave the tp field blank", true)
+//                true
+//            }
+//            TextUtils.isEmpty(date) -> {
+//                showErrorSnackBar("Please do not leave the date field blank", true)
+//                true
+//            }
+//            TextUtils.isEmpty(time) -> {
+//                showErrorSnackBar("Please do not leave the time field blank", true)
+//                true
+//            }
+//            else -> {
+////                FirestoreClass().validateRoomBooking(this, roomBooking)
+//                viewModel.validateRoomBooking(roomBooking)
+//                false
+//            }
+//        }
     }
 
     fun saveRoomBookingSuccess() {
