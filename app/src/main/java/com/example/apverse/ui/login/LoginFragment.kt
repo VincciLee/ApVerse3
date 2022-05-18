@@ -76,12 +76,14 @@ class LoginFragment : BaseFragment() {
             FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if(task.isSuccessful){
+                        hideProgressDialog()
                         showErrorSnackBar("Logged in successfully.",false)
 
                         Constants.USERTYPE = userType
 
                         val intent = Intent(this@LoginFragment.requireContext(), MainActivity::class.java)
                         startActivity(intent)
+                        (requireActivity() as LoginActivity).finish()
                     }
                     else{
                         hideProgressDialog()
