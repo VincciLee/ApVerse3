@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import com.example.apverse.MainActivity
 import com.example.apverse.R
 import com.example.apverse.databinding.FragmentLHomeBinding
@@ -14,6 +15,7 @@ import com.example.apverse.firestore.FirestoreClass
 import com.example.apverse.model.BookReservation
 import com.example.apverse.model.RoomBooking
 import com.example.apverse.ui.BaseFragment
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -26,13 +28,13 @@ class LHomeFragment : BaseFragment() {
 //        fun newInstance() = LHomeFragment()
 //    }
 //
-//    private lateinit var viewModel: LHomeViewModel
+    private lateinit var viewModel: LHomeViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-//        val lHomeViewModel = ViewModelProvider(this).get(LHomeViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(LHomeViewModel::class.java)
 
         _binding = FragmentLHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -42,40 +44,41 @@ class LHomeFragment : BaseFragment() {
 
         (requireActivity() as MainActivity).supportActionBar?.title = "Homepage"
 
-//        binding.textLHomeBook.text = viewModel.bookingCount.toString()
-
-//        val textView: TextView = binding.textLHome
-//        lHomeViewModel.text.observe(viewLifecycleOwner) {
-//            textView.text = it
-//        }
-
-        getBookingCount()
-        getReservationCount()
+        viewLifecycleOwner.lifecycleScope.launch {
+            getBookingCount()
+            getReservationCount()
+        }
 
         return root
     }
 
-    private fun getBookingCount() {
+    private suspend fun getBookingCount() {
 //        showProgressDialog()
 
         val current = Calendar.getInstance().time
         val dateFormatter = SimpleDateFormat("yyyy-MM-dd")
         val today = dateFormatter.format(current)
 
-        FirestoreClass().getBookingCount(this, today)
+//        FirestoreClass().getBookingCount(this, today)
+        viewModel.getRoomBookingCount(today)
+        val count = viewModel.roomBookingCount
+        successGetBookingCount(count)
     }
 
-    fun successGetBookingCount(bookingList: ArrayList<RoomBooking>) {
-        binding.textLHomeBook.text = bookingList.size.toString()
+    fun successGetBookingCount(count: Int) {
+        binding.textLHomeBook.text = count.toString()
 //        hideProgressDialog()
     }
 
-    private fun getReservationCount() {
-        FirestoreClass().getReservationCount(this)
+    private suspend fun getReservationCount() {
+//        FirestoreClass().getReservationCount(this)
+        viewModel.getBookReservationCount()
+        val count = viewModel.bookReservationCount
+        successGetReservationCount(count)
     }
 
-    fun successGetReservationCount(reservationList: ArrayList<BookReservation>) {
-        binding.textLHomeReservation.text = reservationList.size.toString()
+    fun successGetReservationCount(count: Int) {
+        binding.textLHomeReservation.text = count.toString()
     }
 
     override fun onDestroyView() {

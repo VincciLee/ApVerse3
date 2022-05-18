@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apverse.MainActivity
 import com.example.apverse.R
@@ -17,6 +18,7 @@ import com.example.apverse.firestore.FirestoreClass
 import com.example.apverse.model.RoomBooking
 import com.example.apverse.ui.BaseFragment
 import com.example.apverse.utils.Constants
+import kotlinx.coroutines.launch
 
 class LRoomFragment : BaseFragment() {
 
@@ -24,7 +26,7 @@ class LRoomFragment : BaseFragment() {
 //        fun newInstance() = LRoomFragment()
 //    }
 //
-//    private lateinit var viewModel: LRoomViewModel
+    private lateinit var viewModel: LRoomViewModel
 
     private var _binding: FragmentLRoomBinding? = null
     private val binding get() = _binding!!
@@ -33,12 +35,16 @@ class LRoomFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        viewModel = ViewModelProvider(this).get(LRoomViewModel::class.java)
+
         _binding = FragmentLRoomBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         (requireActivity() as MainActivity).supportActionBar?.title = "Discussion Room"
 
-        loadRoomBookings()
+        viewLifecycleOwner.lifecycleScope.launch {
+            loadRoomBookings()
+        }
 
         return root
     }
@@ -49,9 +55,12 @@ class LRoomFragment : BaseFragment() {
 //        // TODO: Use the ViewModel
 //    }
 
-    private fun loadRoomBookings() {
+    private suspend fun loadRoomBookings() {
         showProgressDialog()
-        FirestoreClass().getRoomBookings(this)
+//        FirestoreClass().getRoomBookings(this)
+        viewModel.getAllBookings()
+        val bookingList = viewModel.roomBookingList
+        successLoadRoomBoookings(bookingList)
     }
 
     fun successLoadRoomBoookings(myBookings: ArrayList<RoomBooking>) {

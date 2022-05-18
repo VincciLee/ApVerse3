@@ -21,7 +21,6 @@ class SMyRoomViewModel: ViewModel() {
     var existingBookings: ArrayList<RoomBooking> = ArrayList()
 
     var errorMessage: String = ""
-    var allBookingList: ArrayList<RoomBooking> = ArrayList()
 
     suspend fun getMyRoomDetails(roomId: String) {
         myRoomDetails.clear()
@@ -133,15 +132,5 @@ class SMyRoomViewModel: ViewModel() {
     suspend fun deleteMyBooking(docId: String) : Boolean{
         return Firestore().deleteMyBooking(docId)
     }
-
-//    suspend fun getAllBookings() {
-//        allBookingList.clear()
-//
-//        val data = Firestore().getAllBookings()
-//        for (i in data?.documents!!){
-//            val booking = i?.toObject(RoomBooking::class.java)!!
-//            allBookingList.add(booking)
-//        }
-//    }
 
 }

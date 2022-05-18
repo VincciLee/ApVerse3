@@ -62,6 +62,8 @@ class Firestore {
     suspend fun getAllBookings() : QuerySnapshot?{
         return try {
             val data = mFireStore.collection(Constants.ROOM_BOOKING)
+                .orderBy(Constants.DATE)
+                .orderBy(Constants.TIME)
                 .get()
                 .await()
             data
@@ -91,6 +93,19 @@ class Firestore {
                 .whereEqualTo(Constants.STUDENT_EMAIL, getCurrentUserEmail())
                 .orderBy(Constants.DATE)
                 .orderBy(Constants.TIME)
+                .get()
+                .await()
+            data
+        }
+        catch (e: Exception) {
+            null
+        }
+    }
+
+    suspend fun getBookingCount(date: String) : QuerySnapshot?{
+        return try {
+            val data = mFireStore.collection(Constants.ROOM_BOOKING)
+                .whereEqualTo(Constants.DATE, date)
                 .get()
                 .await()
             data
@@ -200,6 +215,20 @@ class Firestore {
             val data = mFireStore.collection(Constants.BOOK_RESERVATION)
                 .whereEqualTo(Constants.STUDENT_EMAIL, getCurrentUserEmail())
                 .orderBy(Constants.READY, Query.Direction.DESCENDING)
+                .get()
+                .await()
+            data
+        }
+        catch (e: Exception) {
+            null
+        }
+    }
+
+    suspend fun getBookReservationCount() : QuerySnapshot?{
+        return try {
+            val data = mFireStore.collection(Constants.BOOK_RESERVATION)
+                .orderBy(Constants.DATE)
+                .orderBy(Constants.TIME)
                 .get()
                 .await()
             data

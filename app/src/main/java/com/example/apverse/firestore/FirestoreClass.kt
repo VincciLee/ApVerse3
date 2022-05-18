@@ -358,7 +358,7 @@ class FirestoreClass {
                 when (fragment) {
                     is LHomeFragment -> {
                         Log.i("ApVerse::Firebase", "success getBookingCount()")
-                        fragment.successGetBookingCount(bookingList)
+//                        fragment.successGetBookingCount(bookingList)
                     }
                 }
             }
@@ -686,7 +686,7 @@ class FirestoreClass {
                 when (fragment) {
                     is LHomeFragment -> {
                         Log.i("ApVerse::Firebase", "Success getReservationCount() ")
-                        fragment.successGetReservationCount(reservationList)
+//                        fragment.successGetReservationCount(reservationList)
                     }
                 }
             }
