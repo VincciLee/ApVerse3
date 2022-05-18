@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.apverse.MainActivity
 import com.example.apverse.R
 import com.example.apverse.adapter.MyBookingAdapter
@@ -111,6 +112,30 @@ class SHomeFragment : BaseFragment() {
 
     fun failedGetMyReservations() {
         showErrorSnackBar("Unable to retrieve your book reservation records.", true)
+    }
+
+    suspend fun cancelReservation(docId: String) {
+        val result = viewModel.cancelReservation(docId)
+
+        if (result) {
+            successCancelReservations()
+        }
+        else {
+            failedCancelReservations()
+        }
+    }
+
+    fun successCancelReservations() {
+        showErrorSnackBar("Book reservation cancelled.", false)
+        reload()
+    }
+
+    fun failedCancelReservations() {
+        showErrorSnackBar("Unable to cancel book reservation.", true)
+    }
+
+    fun reload() {
+        this.findNavController().navigate(SHomeFragmentDirections.actionNavSHomeSelf())
     }
 
     override fun onDestroyView() {

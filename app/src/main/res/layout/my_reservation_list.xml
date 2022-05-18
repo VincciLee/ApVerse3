@@ -20,10 +20,22 @@
         android:id="@+id/text_s_home_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
+        android:layout_marginTop="35dp"
         android:padding="15dp"
         android:text="Status"
         android:textSize="18sp"
         android:textStyle="italic"/>
+
+    <Button
+        android:id="@+id/btn_s_home_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|right"
+        android:layout_marginRight="10dp"
+        android:paddingVertical="5dp"
+        android:paddingHorizontal="15dp"
+        android:text="Cancel"
+        android:textSize="18sp"
+        android:backgroundTint="@color/dark_red"/>
 
 </com.google.android.material.card.MaterialCardView>

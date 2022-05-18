@@ -53,7 +53,12 @@ class SHomeViewModel : ViewModel() {
         val data = Firestore().getMyReservationList()
         for (i in data?.documents!!){
             val reservation = i?.toObject(BookReservation::class.java)!!
+            reservation.doc_id = i.id
             reservationList.add(reservation)
         }
+    }
+
+    suspend fun cancelReservation(docId: String) : Boolean {
+        return Firestore().deleteReservation(docId)
     }
 }

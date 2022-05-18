@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_nav_s_home_to_SMyRoomFragment"
             app:destination="@id/SMyRoomFragment" />
+        <action
+            android:id="@+id/action_nav_s_home_self"
+            app:destination="@id/nav_s_home" />
     </fragment>
     <fragment
         android:id="@+id/nav_s_room"
