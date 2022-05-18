@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -16,6 +17,7 @@ import com.example.apverse.model.BookReservation
 import com.example.apverse.model.Books
 import com.example.apverse.ui.librarian.book.LBookReservationFragment
 import com.example.apverse.utils.Constants
+import kotlinx.coroutines.launch
 
 class BookReservationAdapter(
     private val fragment: LBookReservationFragment,
@@ -72,11 +74,18 @@ class BookReservationAdapter(
 
             holder.itemView.findViewById<Button>(R.id.btn_alert).setOnClickListener { root ->
                 if (isReady == true) {
-                    FirestoreClass().deleteReservation(fragment, docId)
+//                    FirestoreClass().deleteReservation(fragment, docId)
+                    fragment.viewLifecycleOwner.lifecycleScope.launch {
+                        fragment.deleteReservation(docId)
+                    }
                 }
                 else {
                     reservationHashMap[Constants.READY] = true
-                    FirestoreClass().validateReservation(fragment, docId, reservationHashMap, bookId)
+//                    FirestoreClass().validateReservation(fragment, docId, reservationHashMap, bookId)
+
+                    fragment.viewLifecycleOwner.lifecycleScope.launch {
+                        fragment.validateReservation(docId, bookId, reservationHashMap)
+                    }
                 }
             }
         }

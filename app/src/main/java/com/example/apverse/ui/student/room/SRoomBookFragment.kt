@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.apverse.R
 import com.example.apverse.databinding.FragmentSRoomBookBinding
+import com.example.apverse.firestore.Firestore
 import com.example.apverse.firestore.FirestoreClass
 import com.example.apverse.model.NewRoomBooking
 import com.example.apverse.model.RoomBooking
@@ -124,7 +125,7 @@ class SRoomBookFragment : BaseFragment() {
 
         val roomBooking = NewRoomBooking(
             args.roomId,
-            FirestoreClass().getCurrentUserEmail(),
+            Firestore().getCurrentUserEmail(),
             name,
             tp,
             date,

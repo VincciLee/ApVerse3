@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apverse.MainActivity
@@ -15,16 +17,19 @@ import com.example.apverse.databinding.FragmentLBookReservationBinding
 import com.example.apverse.firestore.FirestoreClass
 import com.example.apverse.model.BookReservation
 import com.example.apverse.ui.BaseFragment
+import kotlinx.coroutines.launch
 
 class LBookReservationFragment : BaseFragment() {
 
     private var _binding: FragmentLBookReservationBinding? = null
     private val binding get() = _binding!!
+    private lateinit var viewModel: LBookReservationViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        viewModel = ViewModelProvider(this).get(LBookReservationViewModel::class.java)
 
         _binding = FragmentLBookReservationBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -34,14 +39,19 @@ class LBookReservationFragment : BaseFragment() {
 
         (requireActivity() as MainActivity).supportActionBar?.title = "Book Reservation"
 
-        loadReservations()
+        viewLifecycleOwner.lifecycleScope.launch {
+            loadReservations()
+        }
 
         return root
     }
 
-    fun loadReservations() {
+    suspend fun loadReservations() {
         showProgressDialog()
-        FirestoreClass().getReservations(this)
+//        FirestoreClass().getReservations(this)
+        viewModel.getAllReservations()
+        val reservationList = viewModel.reservationList
+        successLoadReservation(reservationList)
     }
 
     fun successLoadReservation(myReservation: ArrayList<BookReservation>) {
@@ -49,6 +59,18 @@ class LBookReservationFragment : BaseFragment() {
         val recyclerView = binding.root.findViewById<RecyclerView>(R.id.rv_l_reservation_list)
         recyclerView.adapter = BookReservationAdapter(this, myReservation)
         recyclerView.setHasFixedSize(true)
+    }
+
+    suspend fun validateReservation(docId: String, bookId: String, hashMap: HashMap<String, Any>) {
+        val result = viewModel.validateReservation(docId, bookId, hashMap)
+
+        if(result) {
+            successUpdateReservation()
+        }
+        else {
+            val message = viewModel.errorMessage
+            failedUpdateReservation(message)
+        }
     }
 
     fun successUpdateReservation(){
@@ -59,6 +81,17 @@ class LBookReservationFragment : BaseFragment() {
 
     fun failedUpdateReservation(message: String){
         showErrorSnackBar("$message", true)
+    }
+
+    suspend fun deleteReservation(docId: String) {
+        val result = viewModel.deleteReservation(docId)
+
+        if(result) {
+            successDeleteReservation()
+        }
+        else {
+            failedDeleteReservation()
+        }
     }
 
     fun successDeleteReservation(){

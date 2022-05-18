@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apverse.R
+import com.example.apverse.firestore.Firestore
 import com.example.apverse.firestore.FirestoreClass
 import com.example.apverse.model.BookReservation
 import com.example.apverse.ui.student.book.SBookDetailsFragment
@@ -48,7 +49,7 @@ class BookDetailsAdapter(
             holder.itemView.findViewById<TextView>(R.id.text_reserved_date).text = date
             holder.itemView.findViewById<TextView>(R.id.text_reserved_status).text = status
 
-            if(studentEmail == FirestoreClass().getCurrentUserEmail()) {
+            if(studentEmail == Firestore().getCurrentUserEmail()) {
                 if(isReady == true) {
                     holder.itemView.findViewById<TextView>(R.id.text_reserved_status).text = Constants.IS_READY
                 }

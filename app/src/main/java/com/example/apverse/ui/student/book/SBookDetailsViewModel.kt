@@ -51,6 +51,6 @@ class SBookDetailsViewModel : ViewModel() {
     }
 
     suspend fun deleteMyReservation() : Boolean{
-        return Firestore().deleteMyReservation(myReservationId)
+        return Firestore().deleteReservation(myReservationId)
     }
 }

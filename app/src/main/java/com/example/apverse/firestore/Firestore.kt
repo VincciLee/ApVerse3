@@ -196,6 +196,20 @@ class Firestore {
         }
     }
 
+    suspend fun getAllReservations() : QuerySnapshot?{
+        return try {
+            val data = mFireStore.collection(Constants.BOOK_RESERVATION)
+                .orderBy(Constants.DATE)
+                .orderBy(Constants.TIME)
+                .get()
+                .await()
+            data
+        }
+        catch (e: Exception) {
+            null
+        }
+    }
+
     suspend fun getBookReservation(bookId: String) : QuerySnapshot?{
         return try {
             val data = mFireStore.collection(Constants.BOOK_RESERVATION)
@@ -238,6 +252,19 @@ class Firestore {
         }
     }
 
+    suspend fun updateBookStatus(docId: String, hashMap: HashMap<String, Any>) : Boolean {
+        return try {
+            val data = mFireStore.collection(Constants.BOOKS)
+                .document(docId)
+                .update(hashMap)
+                .await()
+            true
+        }
+        catch (e: Exception) {
+            false
+        }
+    }
+
     suspend fun reserveBook(reservationInfo: NewBookReservation) : Boolean {
         return try {
             val data = mFireStore.collection(Constants.BOOK_RESERVATION)
@@ -251,7 +278,33 @@ class Firestore {
         }
     }
 
-    suspend fun deleteMyReservation(docId: String) : Boolean {
+    suspend fun validateReservation(bookId: String) : QuerySnapshot?{
+        return try {
+            val data = mFireStore.collection(Constants.BOOKS)
+                .whereEqualTo(Constants.BOOK_ID, bookId)
+                .get()
+                .await()
+            data
+        }
+        catch (e: Exception) {
+            null
+        }
+    }
+
+    suspend fun updateReservation(docId: String, hashMap: HashMap<String, Any>): Boolean {
+        return try {
+            val data = mFireStore.collection(Constants.BOOK_RESERVATION)
+                .document(docId)
+                .update(hashMap)
+                .await()
+            true
+        }
+        catch (e: Exception) {
+            false
+        }
+    }
+
+    suspend fun deleteReservation(docId: String) : Boolean {
         return try {
             val data = mFireStore.collection(Constants.BOOK_RESERVATION)
                 .document(docId)

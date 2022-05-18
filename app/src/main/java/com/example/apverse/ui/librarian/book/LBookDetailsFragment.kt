@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +21,7 @@ import com.example.apverse.model.BookReservation
 import com.example.apverse.model.Books
 import com.example.apverse.ui.BaseFragment
 import com.example.apverse.utils.Constants
+import kotlinx.coroutines.launch
 
 class LBookDetailsFragment : BaseFragment() {
 
@@ -26,34 +29,45 @@ class LBookDetailsFragment : BaseFragment() {
     private val binding get() = _binding!!
     private val args: LBookDetailsFragmentArgs by navArgs()
 
-    private var bookStatus: String = ""
+//    private var bookStatus: String = ""
     private var docId: String = ""
+
+    private lateinit var viewModel: LBookViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        viewModel = ViewModelProvider(this).get(LBookViewModel::class.java)
+
         _binding = FragmentLBookDetailsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         (requireActivity() as MainActivity).supportActionBar?.title = "Book Details"
 
-        // Show book info
-        getBookDetails(args.bookId)
+        viewLifecycleOwner.lifecycleScope.launch {
+            // Show book info
+            getBookDetails(args.bookId)
 
-        // Show reservation list
-        loadReservation(args.bookId)
+            // Show reservation list
+            loadReservation(args.bookId)
+        }
 
         binding.btnBorrow.setOnClickListener{
-            updateBookStatus()
+            viewLifecycleOwner.lifecycleScope.launch {
+                updateBookStatus()
+            }
         }
 
         return root
     }
 
-    private fun getBookDetails(bookId: String){
+    private suspend fun getBookDetails(bookId: String){
         showProgressDialog()
-        FirestoreClass().getBookDetails(this, bookId)
+//        FirestoreClass().getBookDetails(this, bookId)
+        viewModel.getBookDetails(args.bookId)
+        val bookInfo = viewModel.bookDetails
+        showBookDetails(bookInfo)
     }
 
     fun showBookDetails(book: Books){
@@ -63,7 +77,7 @@ class LBookDetailsFragment : BaseFragment() {
         binding.textLBookDetailsAuthor.text = book.book_author
         binding.textLBookDetailsYear.text = book.book_year
 
-        bookStatus = book.book_status
+//        bookStatus = book.book_status
         docId = book.doc_id
 
         Glide.with(this)
@@ -73,7 +87,7 @@ class LBookDetailsFragment : BaseFragment() {
                     .override(80,80))
             .into(binding.lBookDetailsImage)
 
-        if(bookStatus == "Available"){
+        if(book.book_status == "Available"){
             binding.btnBorrow.text = "Borrow"
         }
         else{
@@ -87,8 +101,11 @@ class LBookDetailsFragment : BaseFragment() {
         showErrorSnackBar("Unable to get the book details.", true)
     }
 
-    fun loadReservation(bookId: String){
-        FirestoreClass().getBookReservation(this, bookId)
+    suspend fun loadReservation(bookId: String){
+//        FirestoreClass().getBookReservation(this, bookId)
+        viewModel.getReservationList(args.bookId)
+        val reservationList = viewModel.reservationList
+        successLoadReservation(reservationList)
     }
 
     fun successLoadReservation(myReservations: ArrayList<BookReservation>) {
@@ -97,17 +114,25 @@ class LBookDetailsFragment : BaseFragment() {
         recyclerView.setHasFixedSize(true)
     }
 
-    private fun updateBookStatus() {
-        val bookHashMap: HashMap<String, Any> = HashMap()
+    private suspend fun updateBookStatus() {
+//        val bookHashMap: HashMap<String, Any> = HashMap()
+//
+//        if(bookStatus == "Available"){
+//            bookHashMap[Constants.BOOK_STATUS] = "Borrowed"
+//        }
+//        else{
+//            bookHashMap[Constants.BOOK_STATUS] = "Available"
+//        }
 
-        if(bookStatus == "Available"){
-            bookHashMap[Constants.BOOK_STATUS] = "Borrowed"
-        }
-        else{
-            bookHashMap[Constants.BOOK_STATUS] = "Available"
-        }
+//        FirestoreClass().updateBookStatus(this, docId, bookHashMap)
+        val result = viewModel.updateBookStatus()
 
-        FirestoreClass().updateBookStatus(this, docId, bookHashMap)
+        if(result) {
+            successUpdateBookStatus()
+        }
+        else {
+            failedUpdateBookStatus()
+        }
     }
 
     fun successUpdateBookStatus() {

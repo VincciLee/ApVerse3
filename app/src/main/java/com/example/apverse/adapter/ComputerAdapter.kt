@@ -50,7 +50,7 @@ class ComputerAdapter(
              Log.i("ApVerse::CompAdapter", "docId: $docId")
 
              if(isUsing == true){
-                 if(computerUser == FirestoreClass().getCurrentUserEmail()){
+                 if(computerUser == Firestore().getCurrentUserEmail()){
                      holder.itemView.findViewById<MaterialButton>(R.id.btn_computer).text = "Finish"
                  }else{
                      if(status == Constants.FREE){
@@ -74,7 +74,7 @@ class ComputerAdapter(
                  Log.i("ApVerse::CompAdapter", "btn_computer on clicked")
 
                  if(isUsing == true) {
-                     if (computerUser == FirestoreClass().getCurrentUserEmail()) {
+                     if (computerUser == Firestore().getCurrentUserEmail()) {
                          Log.i("ApVerse::CompAdapter", "isUsing == true")
                          computerHashmap[Constants.COMPUTER_STATUS] = Constants.FREE
                          computerHashmap[Constants.STUDENT_EMAIL] = ""
@@ -84,7 +84,7 @@ class ComputerAdapter(
                  }else{
                      Log.i("ApVerse::CompAdapter", "isUsing == false")
                      computerHashmap[Constants.COMPUTER_STATUS] = Constants.IN_USE
-                     computerHashmap[Constants.STUDENT_EMAIL] = FirestoreClass().getCurrentUserEmail()
+                     computerHashmap[Constants.STUDENT_EMAIL] = Firestore().getCurrentUserEmail()
 
 //                     checkingHashMap[Constants.COMPUTER_ID] = computerId
                  }
