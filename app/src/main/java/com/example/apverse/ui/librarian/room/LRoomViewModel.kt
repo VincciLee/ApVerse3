@@ -11,6 +11,7 @@ import kotlin.collections.ArrayList
 class LRoomViewModel : ViewModel() {
 
     var roomBookingList: ArrayList<RoomBooking> = ArrayList()
+    var bookingHistoryList: ArrayList<RoomBooking> = ArrayList()
 
     suspend fun getAllBookings() {
         roomBookingList.clear()
@@ -18,6 +19,7 @@ class LRoomViewModel : ViewModel() {
         val data = Firestore().getAllBookings()
         for (i in data?.documents!!){
             val booking = i?.toObject(RoomBooking::class.java)!!
+            booking.doc_id = i.id
 
             val current = Calendar.getInstance().time
             val dateFormatter = SimpleDateFormat("yyyy-MM-dd")
@@ -33,4 +35,35 @@ class LRoomViewModel : ViewModel() {
         }
     }
 
+    suspend fun getBookingHistory() {
+        bookingHistoryList.clear()
+
+        val data = Firestore().getAllBookings()
+        for (i in data?.documents!!){
+            val booking = i?.toObject(RoomBooking::class.java)!!
+            booking.doc_id = i.id
+
+            val current = Calendar.getInstance().time
+            val dateFormatter = SimpleDateFormat("yyyy-MM-dd")
+            val dataDate = booking?.date
+            val today = dateFormatter.format(current)
+
+            if(dataDate?.compareTo(today)!! < 0){
+                bookingHistoryList.add(booking)
+            }
+        }
+    }
+
+    suspend fun clearBookingHistory() : Boolean {
+        var result = true
+        var i = 0
+        var size = bookingHistoryList.size
+
+        while(i < size && result) {
+            result = Firestore().deleteMyBooking(bookingHistoryList[i].doc_id)
+            i++
+        }
+
+        return result
+    }
 }

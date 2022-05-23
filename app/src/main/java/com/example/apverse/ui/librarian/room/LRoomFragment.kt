@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apverse.MainActivity
 import com.example.apverse.R
@@ -46,6 +47,30 @@ class LRoomFragment : BaseFragment() {
             loadRoomBookings()
         }
 
+        binding.swtBooking?.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    binding.swtBooking.text = "Upcoming"
+                    binding.textLBookingTitle.text = "Booking List"
+                    binding.btnLClearBooking.visibility = View.INVISIBLE
+                    loadRoomBookings()
+                }
+            } else {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    binding.swtBooking.text = "History"
+                    binding.textLBookingTitle.text = "Booking History"
+                    binding.btnLClearBooking.visibility = View.VISIBLE
+                    loadBookingHistory()
+                }
+            }
+        }
+
+        binding.btnLClearBooking.setOnClickListener {
+            viewLifecycleOwner.lifecycleScope.launch {
+                clearBookingHistory()
+            }
+        }
+
         return root
     }
 
@@ -63,6 +88,13 @@ class LRoomFragment : BaseFragment() {
         successLoadRoomBoookings(bookingList)
     }
 
+    private suspend fun loadBookingHistory() {
+        showProgressDialog()
+        viewModel.getBookingHistory()
+        val bookingList = viewModel.bookingHistoryList
+        successLoadRoomBoookings(bookingList)
+    }
+
     fun successLoadRoomBoookings(myBookings: ArrayList<RoomBooking>) {
         Log.i("ApVerse::LRoomFragment", "successLoadRoomBoookings()")
         hideProgressDialog()
@@ -74,5 +106,29 @@ class LRoomFragment : BaseFragment() {
     fun failedLoadRoomBoookings(message: String) {
         hideProgressDialog()
         showErrorSnackBar(message, true)
+    }
+
+    suspend fun clearBookingHistory() {
+        val result = viewModel.clearBookingHistory()
+
+        if(result) {
+            successClearBoookings()
+        }
+        else {
+            failedClearBoookings()
+        }
+    }
+
+    fun successClearBoookings() {
+        showErrorSnackBar("Clear room booking successfully.", false)
+        reload()
+    }
+
+    fun failedClearBoookings() {
+        showErrorSnackBar("Failed to clear the bookings.", true)
+    }
+
+    fun reload() {
+        this.findNavController().navigate(LRoomFragmentDirections.actionNavLRoomSelf())
     }
 }
