@@ -42,7 +42,7 @@ object Constants {
     const val FREE: String = "Free"
     const val IN_USE: String = "In Use"
 
-    var USERTYPE: String = "student"
+    var USERTYPE: String = "librarian"
     var L_BOOK_TITLE: String = ""
     var L_BOOK_IMG: String = ""
 }

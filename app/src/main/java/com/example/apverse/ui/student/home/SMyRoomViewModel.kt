@@ -63,6 +63,7 @@ class SMyRoomViewModel: ViewModel() {
         calendar.setTime(date)
         val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
         Log.i("ApVerse::SRoomBookVM", "date = $bookingDate, $dayOfWeek")
+        Log.i("ApVerse:: MyRoomVM", "hour = $hour")
 
         val data = Firestore().getSelectedRoomBookings(roomId, bookingDate)
         for (i in data?.documents!!){
@@ -74,16 +75,16 @@ class SMyRoomViewModel: ViewModel() {
             }
         }
 
-        if (dayOfWeek == 1 || dayOfWeek == 7) {
+        if (bookingDate?.compareTo(currentDate)!! < 0){
+            errorMessage = "Cannot book discussion room before today."
+            return false
+        }
+        else if (dayOfWeek == 1 || dayOfWeek == 7) {
             errorMessage = "Cannot book discussion room on weekends."
             return false
         }
         else if (hour.toInt() < 9 || hour.toInt() > 18){
             errorMessage = "The time selected must between 9am and 6pm."
-            return false
-        }
-        else if (minute != "30" && minute != "00") {
-            errorMessage = "The time selected must 30 minutes interval."
             return false
         }
         else if (bookingDate?.compareTo(currentDate) == 0){
@@ -95,6 +96,10 @@ class SMyRoomViewModel: ViewModel() {
                 errorMessage = "The time selected must later than current time."
                 return false
             }
+        }
+        else if (minute != "30" && minute != "00") {
+            errorMessage = "The time selected must 30 minutes interval."
+            return false
         }
 
         for (i in existingBookings) {

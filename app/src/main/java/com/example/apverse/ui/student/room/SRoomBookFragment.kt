@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.apverse.MainActivity
 import com.example.apverse.R
 import com.example.apverse.databinding.FragmentSRoomBookBinding
 import com.example.apverse.firestore.Firestore
@@ -51,6 +52,8 @@ class SRoomBookFragment : BaseFragment() {
 
         _binding = FragmentSRoomBookBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        (requireActivity() as MainActivity).supportActionBar?.title = "Room Booking"
 
         viewLifecycleOwner.lifecycleScope.launch {
             setTextValue()

@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
@@ -18,12 +19,14 @@ import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.apverse.databinding.ActivityMainBinding
+import com.example.apverse.firestore.Firestore
 import com.example.apverse.firestore.FirestoreClass
 import com.example.apverse.model.Users
 import com.example.apverse.utils.Constants
 import com.example.apverse.utils.GlideLoader
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -39,21 +42,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
-        // Probably the code called the message bubble
-//        binding.appBarMain.fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show()
-//        }
-
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
 
         // Get info of login user
-        FirestoreClass().getUserDetails(this)
+        lifecycleScope.launch {
+            val data = Firestore().getUserInfo()
+            var user: Users = Users()
 
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+            for (i in data?.documents!!){
+                user = i?.toObject(Users::class.java)!!
+            }
+
+            DisplayHeaderInfo(user)
+        }
+
+        // Setup drawer menu
         if(Constants.USERTYPE == "librarian"){
             // This is setup for librarian
             navController.setGraph(R.navigation.librarian_navigation)
@@ -80,8 +85,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
-        // This will affect the menu working    [SETTLED]
         navView.setNavigationItemSelectedListener(this)
     }
 
@@ -106,6 +109,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if(!handled){
             when (item.itemId){
                 R.id.nav_logout -> {
+                    Constants.USERTYPE = "librarian"
                     Log.i("ApVerse", "User has logged out. ")
 
                     FirebaseAuth.getInstance().signOut()
@@ -133,8 +137,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         Glide.with(this)
             .load(user.user_profile)
             .apply(RequestOptions.placeholderOf(R.drawable.profile_user)
-//            .placeholder(R.drawable.profile_user)
-//            .apply(new RequestOptions().override(600, 200))
             .override(75,75))
             .into(userProfile)
     }
