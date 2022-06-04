@@ -2,7 +2,6 @@ package com.example.apverse.ui.student.home
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,9 +34,6 @@ class SHomeFragment : BaseFragment() {
 
         _binding = FragmentSHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        val inflater = layoutInflater
-        val view: View = inflater.inflate(R.layout.fragment_s_home, null)
 
         (requireActivity() as MainActivity).supportActionBar?.title = "Homepage"
 

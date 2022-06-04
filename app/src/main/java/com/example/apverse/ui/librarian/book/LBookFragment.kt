@@ -32,9 +32,6 @@ class LBookFragment : BaseFragment() {
         _binding = FragmentLBookBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val inflater = layoutInflater
-        val view: View = inflater.inflate(R.layout.fragment_l_book, null)
-
         (requireActivity() as MainActivity).supportActionBar?.title = "Library Book"
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -58,6 +55,11 @@ class LBookFragment : BaseFragment() {
         recyclerView.adapter = BookAdapter(this, myBooks)
         recyclerView.layoutManager = GridLayoutManager(this.context, 2)
         recyclerView.setHasFixedSize(true)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

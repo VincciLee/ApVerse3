@@ -30,9 +30,6 @@ class LHomeFragment : BaseFragment() {
         _binding = FragmentLHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val inflater = layoutInflater
-        val view: View = inflater.inflate(R.layout.fragment_l_home, null)
-
         (requireActivity() as MainActivity).supportActionBar?.title = "Homepage"
 
         viewLifecycleOwner.lifecycleScope.launch {

@@ -13,17 +13,4 @@
     <string name="menu_reservation">Book Reservation</string>
     <string name="menu_computer">Computer</string>
     <string name="logout">Logout</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
-    <string name="room1">1</string>
-    <string name="room2">2</string>
-    <string name="room3">3</string>
-    <string name="room4">4</string>
-    <string name="room5">5</string>
-    <string name="room6">6</string>
-    <string name="room7">7</string>
-    <string name="room8">8</string>
-    <string name="capa4">4</string>
-    <string name="capa8">8</string>
 </resources>

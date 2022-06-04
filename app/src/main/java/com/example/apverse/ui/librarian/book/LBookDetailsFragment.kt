@@ -121,4 +121,10 @@ class LBookDetailsFragment : BaseFragment() {
     private fun reload() {
         this.findNavController().navigate(LBookDetailsFragmentDirections.actionLBookDetailsFragmentSelf(args.bookId))
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 }

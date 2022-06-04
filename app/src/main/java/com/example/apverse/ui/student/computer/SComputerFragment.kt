@@ -32,9 +32,6 @@ class SComputerFragment : BaseFragment() {
         _binding = FragmentSComputerBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val inflater = layoutInflater
-        val view: View = inflater.inflate(R.layout.fragment_s_computer, null)
-
         (requireActivity() as MainActivity).supportActionBar?.title = "Library Computer"
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -83,6 +80,11 @@ class SComputerFragment : BaseFragment() {
 
     fun reload() {
         this.findNavController().navigate(R.id.action_nav_s_computer_self)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

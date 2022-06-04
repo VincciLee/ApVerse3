@@ -28,13 +28,8 @@ class SRoomFragment : BaseFragment() {
     ): View? {
         viewModel = ViewModelProvider(this).get(SRoomViewModel::class.java)
 
-        // Bind to Book Fragment
         _binding = FragmentSRoomBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        // Inflate Room Booking xml
-        val inflater = layoutInflater
-        val view: View = inflater.inflate(R.layout.fragment_s_room_book, null)
 
         (requireActivity() as MainActivity).supportActionBar?.title = "Discussion Room"
 

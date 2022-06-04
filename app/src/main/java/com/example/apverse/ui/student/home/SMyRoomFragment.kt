@@ -33,8 +33,6 @@ class SMyRoomFragment : BaseFragment() {
 
         _binding = FragmentSMyRoomBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        val inflater = layoutInflater
-        val view: View = inflater.inflate(R.layout.fragment_s_my_room, null)
 
         (requireActivity() as MainActivity).supportActionBar?.title = "Room Booking"
 
@@ -178,6 +176,11 @@ class SMyRoomFragment : BaseFragment() {
         }
 
         timePickerFragment.show(supportFragmentManager, "TimePickerFragment")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

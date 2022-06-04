@@ -188,4 +188,10 @@ class SBookDetailsFragment : BaseFragment() {
     private fun reload() {
         this.findNavController().navigate(SBookDetailsFragmentDirections.actionSBookDetailsFragmentSelf(args.bookId))
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 }

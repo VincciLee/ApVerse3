@@ -35,9 +35,6 @@ class SBookFragment : BaseFragment() {
         _binding = FragmentSBookBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val inflater = layoutInflater
-        val view: View = inflater.inflate(R.layout.fragment_s_book, null)
-
         (requireActivity() as MainActivity).supportActionBar?.title = "Library Book"
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -64,8 +61,9 @@ class SBookFragment : BaseFragment() {
         recyclerView.setHasFixedSize(true)
     }
 
-    fun reload() {
-        this.findNavController().navigate(SBookFragmentDirections.actionNavSBookSelf())
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

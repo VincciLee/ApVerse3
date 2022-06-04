@@ -31,9 +31,6 @@ class LBookReservationFragment : BaseFragment() {
         _binding = FragmentLBookReservationBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val inflater = layoutInflater
-        val view: View = inflater.inflate(R.layout.fragment_l_book_reservation, null)
-
         (requireActivity() as MainActivity).supportActionBar?.title = "Book Reservation"
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -102,4 +99,10 @@ class LBookReservationFragment : BaseFragment() {
     fun reload() {
         this.findNavController().navigate(R.id.action_nav_l_reservation_self)
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 }

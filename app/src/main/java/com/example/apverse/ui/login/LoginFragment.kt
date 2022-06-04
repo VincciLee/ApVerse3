@@ -104,4 +104,9 @@ class LoginFragment : BaseFragment() {
         (requireActivity() as LoginActivity).finish()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 }

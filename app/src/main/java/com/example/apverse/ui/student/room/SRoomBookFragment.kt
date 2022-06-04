@@ -146,4 +146,9 @@ class SRoomBookFragment : BaseFragment() {
         findNavController().navigate(R.id.action_SRoomBookFragment_to_nav_s_room)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 }

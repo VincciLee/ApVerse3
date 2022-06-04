@@ -110,4 +110,10 @@ class LRoomFragment : BaseFragment() {
     fun reload() {
         this.findNavController().navigate(LRoomFragmentDirections.actionNavLRoomSelf())
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 }
