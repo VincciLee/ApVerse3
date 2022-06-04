@@ -23,6 +23,7 @@ import com.example.apverse.firestore.Firestore
 import com.example.apverse.model.Users
 import com.example.apverse.utils.Constants
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
@@ -85,13 +86,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navView.setNavigationItemSelectedListener(this)
     }
 
-    // This calls the 3 dots icon at right top corner (main.xml)
-//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        menuInflater.inflate(R.menu.main, menu)
-//        return true
-//    }
-
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
@@ -109,6 +103,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     Constants.USERTYPE = "librarian"
                     Log.i("ApVerse", "User has logged out. ")
 
+                    FirebaseApp.initializeApp(this)
                     FirebaseAuth.getInstance().signOut()
                     startActivity(Intent(this, LoginActivity::class.java))
                     finish()

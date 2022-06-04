@@ -14,6 +14,7 @@ import com.example.apverse.MainActivity
 import com.example.apverse.databinding.FragmentLoginBinding
 import com.example.apverse.ui.BaseFragment
 import com.example.apverse.utils.Constants
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
@@ -65,6 +66,7 @@ class LoginFragment : BaseFragment() {
             val email = binding.inputEmail.text.toString().trim{ it<=' ' }
             val password = binding.inputPassword.text.toString().trim{ it<=' ' }
 
+            this.context?.let { FirebaseApp.initializeApp(it) }
             FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if(task.isSuccessful){
