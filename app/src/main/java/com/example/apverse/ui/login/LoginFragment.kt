@@ -4,8 +4,6 @@ import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,20 +11,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.example.apverse.LoginActivity
 import com.example.apverse.MainActivity
-import com.example.apverse.R
 import com.example.apverse.databinding.FragmentLoginBinding
-import com.example.apverse.databinding.FragmentSRoomBookBinding
 import com.example.apverse.ui.BaseFragment
-import com.example.apverse.ui.student.room.SRoomBookFragmentArgs
 import com.example.apverse.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 class LoginFragment : BaseFragment() {
-
-    companion object {
-        fun newInstance() = LoginFragment()
-    }
 
     private lateinit var viewModel: LoginViewModel
     private var _binding: FragmentLoginBinding? = null
@@ -112,11 +103,5 @@ class LoginFragment : BaseFragment() {
         startActivity(intent)
         (requireActivity() as LoginActivity).finish()
     }
-
-//    override fun onActivityCreated(savedInstanceState: Bundle?) {
-//        super.onActivityCreated(savedInstanceState)
-//        viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
-//        // TODO: Use the ViewModel
-//    }
 
 }

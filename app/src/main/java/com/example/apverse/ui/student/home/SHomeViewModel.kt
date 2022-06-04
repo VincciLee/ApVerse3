@@ -1,8 +1,5 @@
 package com.example.apverse.ui.student.home
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.apverse.firestore.Firestore
 import com.example.apverse.model.BookReservation

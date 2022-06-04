@@ -13,12 +13,6 @@ import com.example.apverse.databinding.FragmentUserMenuBinding
 
 class UserMenuFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = UserMenuFragment()
-    }
-
-    private lateinit var viewModel: UserMenuViewModel
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,12 +29,6 @@ class UserMenuFragment : Fragment() {
         }
 
         return binding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(UserMenuViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
 }

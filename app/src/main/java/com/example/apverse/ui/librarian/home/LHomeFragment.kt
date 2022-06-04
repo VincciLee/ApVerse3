@@ -2,18 +2,13 @@ package com.example.apverse.ui.librarian.home
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import com.example.apverse.MainActivity
 import com.example.apverse.R
 import com.example.apverse.databinding.FragmentLHomeBinding
-import com.example.apverse.firestore.FirestoreClass
-import com.example.apverse.model.BookReservation
-import com.example.apverse.model.RoomBooking
 import com.example.apverse.ui.BaseFragment
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -24,10 +19,6 @@ class LHomeFragment : BaseFragment() {
     private var _binding: FragmentLHomeBinding? = null
     private val binding get() = _binding!!
 
-//    companion object {
-//        fun newInstance() = LHomeFragment()
-//    }
-//
     private lateinit var viewModel: LHomeViewModel
 
     override fun onCreateView(
@@ -53,13 +44,10 @@ class LHomeFragment : BaseFragment() {
     }
 
     private suspend fun getBookingCount() {
-//        showProgressDialog()
-
         val current = Calendar.getInstance().time
         val dateFormatter = SimpleDateFormat("yyyy-MM-dd")
         val today = dateFormatter.format(current)
 
-//        FirestoreClass().getBookingCount(this, today)
         viewModel.getRoomBookingCount(today)
         val count = viewModel.roomBookingCount
         successGetBookingCount(count)
@@ -67,11 +55,9 @@ class LHomeFragment : BaseFragment() {
 
     fun successGetBookingCount(count: Int) {
         binding.textLHomeBook.text = count.toString()
-//        hideProgressDialog()
     }
 
     private suspend fun getReservationCount() {
-//        FirestoreClass().getReservationCount(this)
         viewModel.getBookReservationCount()
         val count = viewModel.bookReservationCount
         successGetReservationCount(count)
@@ -85,11 +71,5 @@ class LHomeFragment : BaseFragment() {
         super.onDestroyView()
         _binding = null
     }
-
-//    override fun onActivityCreated(savedInstanceState: Bundle?) {
-//        super.onActivityCreated(savedInstanceState)
-//        viewModel = ViewModelProvider(this).get(LHomeViewModel::class.java)
-//        // TODO: Use the ViewModel
-//    }
 
 }

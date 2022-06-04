@@ -1,8 +1,6 @@
 package com.example.apverse.ui.librarian.book
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +12,6 @@ import com.example.apverse.MainActivity
 import com.example.apverse.R
 import com.example.apverse.adapter.BookReservationAdapter
 import com.example.apverse.databinding.FragmentLBookReservationBinding
-import com.example.apverse.firestore.FirestoreClass
 import com.example.apverse.model.BookReservation
 import com.example.apverse.ui.BaseFragment
 import kotlinx.coroutines.launch
@@ -48,7 +45,7 @@ class LBookReservationFragment : BaseFragment() {
 
     suspend fun loadReservations() {
         showProgressDialog()
-//        FirestoreClass().getReservations(this)
+
         viewModel.getAllReservations()
         val reservationList = viewModel.reservationList
         successLoadReservation(reservationList)
@@ -74,7 +71,6 @@ class LBookReservationFragment : BaseFragment() {
     }
 
     fun successUpdateReservation(){
-        Log.i("ApVerse::LFragment", "LBookReservationFragment - successUpdateReservation()")
         showErrorSnackBar("Book has ready and alert sent to the student.", false)
         reload()
     }
@@ -95,7 +91,6 @@ class LBookReservationFragment : BaseFragment() {
     }
 
     fun successDeleteReservation(){
-        Log.i("ApVerse::LFragment", "LBookReservationFragment - successDeleteReservation()")
         showErrorSnackBar("Book reservation has been removed.", false)
         reload()
     }

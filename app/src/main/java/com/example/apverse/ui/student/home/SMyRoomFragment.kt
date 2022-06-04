@@ -2,22 +2,16 @@ package com.example.apverse.ui.student.home
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.whenCreated
-import androidx.lifecycle.whenResumed
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.apverse.MainActivity
 import com.example.apverse.R
 import com.example.apverse.databinding.FragmentSMyRoomBinding
-import com.example.apverse.firestore.FirestoreClass
-import com.example.apverse.model.NewRoomBooking
 import com.example.apverse.ui.BaseFragment
 import com.example.apverse.ui.DatePickerFragment
 import com.example.apverse.ui.TimePickerFragment
@@ -47,13 +41,7 @@ class SMyRoomFragment : BaseFragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             showMyRoomsDetails()
             showMyRoomBookingInfo()
-//            whenResumed {
-//                showAllBookings()
-//            }
         }
-
-//        binding.btnSMyDate.iconTint = Icons.Filled.CalendarToday
-//        binding.btnSMyDate.icon = Icons.Filled.CalendarToday
 
         binding.btnSMyDate.setOnClickListener {
             val date = binding.inputSMyDate.editText?.text.toString().trim { it <= ' ' }
@@ -192,15 +180,4 @@ class SMyRoomFragment : BaseFragment() {
         timePickerFragment.show(supportFragmentManager, "TimePickerFragment")
     }
 
-//    suspend fun showAllBookings() {
-//        viewModel.getAllBookings()
-//        val allBookings = viewModel.allBookingList
-//        var text = ""
-//
-//        for(i in allBookings) {
-//            text = text + "Room " + i.room_id + ", " + i.student_name + ", " + i.date + "\n"
-//        }
-//
-////        binding.textSHomeTest.text = text
-//    }
 }

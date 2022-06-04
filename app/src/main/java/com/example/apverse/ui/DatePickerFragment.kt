@@ -33,8 +33,6 @@ class DatePickerFragment(private var date:String = ""): DialogFragment(),
             day = date.substringAfter("-").toInt()
         }
 
-        Log.i("ApVerse::DatePicker", "Date = $year-$month-$day")
-
         // return new DatePickerDialog instance
         return DatePickerDialog(requireActivity(), this, year, month, day)
     }

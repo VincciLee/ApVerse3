@@ -33,15 +33,18 @@ class SBookDetailsViewModel : ViewModel() {
     suspend fun getBookReservation(bookId: String) {
         reservationList.clear()
 
-        val data = Firestore().getBookReservation(bookId)
+        val data = Firestore().getAllReservations()
         for (i in data?.documents!!){
             val reservation = i?.toObject(BookReservation::class.java)!!
-            reservation.doc_id = i.id
-            reservationList.add(reservation)
 
-            if(reservation.student_email == Firestore().getCurrentUserEmail()){
-                hasReservation = true
-                myReservationId = i.id
+            if(reservation.book_id == bookId) {
+                reservation.doc_id = i.id
+                reservationList.add(reservation)
+
+                if(reservation.student_email == Firestore().getCurrentUserEmail()){
+                    hasReservation = true
+                    myReservationId = i.id
+                }
             }
         }
     }

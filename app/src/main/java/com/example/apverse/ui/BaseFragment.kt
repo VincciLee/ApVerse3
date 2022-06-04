@@ -21,7 +21,6 @@ open class BaseFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_base, container, false)
     }
 
@@ -53,16 +52,10 @@ open class BaseFragment : Fragment() {
     fun showProgressDialog() {
         mProgressDialog = Dialog(requireActivity())
 
-        /*Set the screen content from a layout resource.
-        The resource will be inflated, adding all top-level views to the screen.*/
         mProgressDialog.setContentView(R.layout.progress_dialog)
-
-        //mProgressDialog.tv_progress_text.text = text
-
         mProgressDialog.setCancelable(false)
         mProgressDialog.setCanceledOnTouchOutside(false)
 
-        //Start the dialog and display it on screen.
         mProgressDialog.show()
     }
 

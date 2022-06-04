@@ -1,17 +1,20 @@
 package com.example.apverse.utils
 
-import android.content.Context
 import android.widget.ImageView
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.apverse.R
 import java.io.IOException
 
-class GlideLoader (val context: Context) {
-    fun loadUserProfile(image:Any, imageView: ImageView){
+class GlideLoader (val fragment: Fragment) {
+    fun loadImage(image:Any, imageView: ImageView, size: Int){
         try{
-            Glide.with(context)
+            Glide.with(fragment)
                 .load(image)
-                .placeholder(R.drawable.profile_user)
+                .apply(
+                    RequestOptions.placeholderOf(R.drawable.unknown)
+                    .override(size, size))
                 .into(imageView)
         }catch(e: IOException){
             e.printStackTrace()

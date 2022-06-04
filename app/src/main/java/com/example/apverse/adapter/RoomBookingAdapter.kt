@@ -1,6 +1,5 @@
 package com.example.apverse.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,8 +28,6 @@ class RoomBookingAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        Log.i("ApVerse::BookingAdapter", "Enter onBindViewHolder()")
-
         if (holder is RoomBookingViewHolder) {
             val item = dataset[position]
             val roomId = item.room_id
@@ -39,9 +36,6 @@ class RoomBookingAdapter(
             val name = item.student_name
             val hdmi = item.hdmi_cable
 
-//            var dbTpNumber = item.student_tp.substringBefore("@")
-//            var dbTp = dbTpNumber.substring(0, 2).uppercase()
-//            var dbNumber = dbTpNumber.substringAfter("tp")
             var tpNumber = item.student_tp
 
             if(time.substringBefore(":").toInt() >= 12){

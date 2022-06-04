@@ -9,14 +9,13 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.example.apverse.R
 import com.example.apverse.model.Books
 import com.example.apverse.ui.librarian.book.LBookFragment
 import com.example.apverse.ui.librarian.book.LBookFragmentDirections
 import com.example.apverse.ui.student.book.SBookFragment
 import com.example.apverse.ui.student.book.SBookFragmentDirections
+import com.example.apverse.utils.GlideLoader
 
 class BookAdapter(
     private val fragment: Fragment,
@@ -52,11 +51,7 @@ class BookAdapter(
 
             when (fragment) {
                 is SBookFragment -> {
-                    Glide.with(fragment)
-                        .load(bookImage)
-                        .apply(RequestOptions.placeholderOf(R.drawable.unknown)
-                            .override(100,100))
-                        .into(holder.itemView.findViewById<ImageView>(R.id.s_book_img))
+                    GlideLoader(fragment).loadImage(bookImage,holder.itemView.findViewById<ImageView>(R.id.s_book_img), 100)
 
                     holder.itemView.findViewById<Button>(R.id.btn_view).setOnClickListener { root ->
                         fragment.findNavController().navigate(SBookFragmentDirections.actionNavSBookToSBookDetailsFragment(bookId))
@@ -64,11 +59,7 @@ class BookAdapter(
                 }
 
                 is LBookFragment -> {
-                    Glide.with(fragment)
-                        .load(bookImage)
-                        .apply(RequestOptions.placeholderOf(R.drawable.unknown)
-                            .override(100,100))
-                        .into(holder.itemView.findViewById<ImageView>(R.id.s_book_img))
+                    GlideLoader(fragment).loadImage(bookImage,holder.itemView.findViewById<ImageView>(R.id.s_book_img), 100)
 
                     holder.itemView.findViewById<Button>(R.id.btn_view).setOnClickListener { root ->
                         fragment.findNavController().navigate(LBookFragmentDirections.actionNavLBookToLBookDetailsFragment(bookId))
@@ -77,11 +68,6 @@ class BookAdapter(
             }
 
         }
-    }
-
-    fun removeItem(position: Int) {
-        dataset.removeAt(position)
-        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {

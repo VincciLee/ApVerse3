@@ -58,5 +58,4 @@ class MyBookingAdapter(
         return dataset.size
     }
 
-
 }

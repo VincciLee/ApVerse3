@@ -1,12 +1,10 @@
 package com.example.apverse.ui.student.room
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.apverse.firestore.Firestore
 import com.example.apverse.model.NewRoomBooking
 import com.example.apverse.model.RoomBooking
 import com.example.apverse.model.Users
-import com.example.apverse.ui.login.LoginFragment
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -32,7 +30,6 @@ class SRoomBookViewModel: ViewModel() {
     }
 
     suspend fun validateRoomBooking(roomBooking: NewRoomBooking) : Boolean {
-        Log.i("ApVerse::SRoomBookVM", "validateRoomBooking()")
         existingBookings.clear()
 
         val roomId = roomBooking.room_id
@@ -51,12 +48,9 @@ class SRoomBookViewModel: ViewModel() {
         val currentHour = currentTime.substringBefore(":")
         val currentMinute = currentTime.substringAfter(":")
 
-        Log.i("ApVerse::SRoomBookVM", "bookingDate = $bookingDate, minute = $minute")
         val date = dateFormatter.parse(bookingDate)
-        Log.i("ApVerse::SRoomBookVM", "date = $date")
         calendar.setTime(date)
         val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
-        Log.i("ApVerse::SRoomBookVM", "date = $bookingDate, $dayOfWeek")
 
         val data = Firestore().getSelectedRoomBookings(roomId, bookingDate)
         for (i in data?.documents!!){
@@ -79,7 +73,7 @@ class SRoomBookViewModel: ViewModel() {
             errorMessage = "Cannot book discussion room on weekends."
             return false
         }
-        else if (hour.toInt() < 9 || hour.toInt() > 18){
+        else if (hour.toInt() < 9 || hour.toInt() >= 18){
             errorMessage = "The time selected must between 9am and 6pm."
             return false
         }

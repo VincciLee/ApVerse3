@@ -20,14 +20,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.apverse.databinding.ActivityMainBinding
 import com.example.apverse.firestore.Firestore
-import com.example.apverse.firestore.FirestoreClass
 import com.example.apverse.model.Users
 import com.example.apverse.utils.Constants
-import com.example.apverse.utils.GlideLoader
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
-
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 

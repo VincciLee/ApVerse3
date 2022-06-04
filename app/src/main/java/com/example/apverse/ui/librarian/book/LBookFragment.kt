@@ -2,7 +2,6 @@ package com.example.apverse.ui.librarian.book
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,17 +12,12 @@ import com.example.apverse.MainActivity
 import com.example.apverse.R
 import com.example.apverse.adapter.BookAdapter
 import com.example.apverse.databinding.FragmentLBookBinding
-import com.example.apverse.firestore.FirestoreClass
 import com.example.apverse.model.Books
 import com.example.apverse.ui.BaseFragment
 import kotlinx.coroutines.launch
 
 class LBookFragment : BaseFragment() {
 
-//    companion object {
-//        fun newInstance() = LBookFragment()
-//    }
-//
     private lateinit var viewModel: LBookViewModel
 
     private var _binding: FragmentLBookBinding? = null
@@ -52,7 +46,7 @@ class LBookFragment : BaseFragment() {
 
     suspend fun loadBooks(){
         showProgressDialog()
-//        FirestoreClass().getBooks(this)
+
         viewModel.getBookList()
         val bookList = viewModel.bookList
         successLoadBooks(bookList)
@@ -65,11 +59,5 @@ class LBookFragment : BaseFragment() {
         recyclerView.layoutManager = GridLayoutManager(this.context, 2)
         recyclerView.setHasFixedSize(true)
     }
-
-//    override fun onActivityCreated(savedInstanceState: Bundle?) {
-//        super.onActivityCreated(savedInstanceState)
-//        viewModel = ViewModelProvider(this).get(LBookViewModel::class.java)
-//        // TODO: Use the ViewModel
-//    }
 
 }

@@ -210,20 +210,6 @@ class Firestore {
         }
     }
 
-    suspend fun getBookReservation(bookId: String) : QuerySnapshot?{
-        return try {
-            val data = mFireStore.collection(Constants.BOOK_RESERVATION)
-                .whereEqualTo(Constants.BOOK_ID, bookId)
-                .orderBy(Constants.DATE)
-                .get()
-                .await()
-            data
-        }
-        catch (e: Exception) {
-            null
-        }
-    }
-
     suspend fun getMyReservationList() : QuerySnapshot?{
         return try {
             val data = mFireStore.collection(Constants.BOOK_RESERVATION)

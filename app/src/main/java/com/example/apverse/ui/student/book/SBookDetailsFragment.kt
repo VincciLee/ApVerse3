@@ -1,14 +1,11 @@
 package com.example.apverse.ui.student.book
 
 import android.app.AlertDialog
-import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -21,19 +18,14 @@ import com.example.apverse.MainActivity
 import com.example.apverse.R
 import com.example.apverse.adapter.BookDetailsAdapter
 import com.example.apverse.databinding.FragmentSBookDetailsBinding
-import com.example.apverse.firestore.Firestore
-import com.example.apverse.firestore.FirestoreClass
 import com.example.apverse.model.BookReservation
 import com.example.apverse.model.Books
 import com.example.apverse.model.NewBookReservation
 import com.example.apverse.model.Users
 import com.example.apverse.ui.BaseFragment
-import com.google.firebase.firestore.auth.User
-import com.google.type.DateTime
+import com.example.apverse.utils.GlideLoader
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -43,9 +35,6 @@ class SBookDetailsFragment : BaseFragment() {
     private val binding get() = _binding!!
     private val args: SBookDetailsFragmentArgs by navArgs()
     private lateinit var viewModel: SBookDetailsViewModel
-
-//    private var bookTitle: String = ""
-//    private var bookImage: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -75,11 +64,9 @@ class SBookDetailsFragment : BaseFragment() {
             val userInfo = viewModel.userInfo
             val bookInfo = viewModel.bookInfo
             val hasReservation = viewModel.hasReservation
-            val myDocId = viewModel.myReservationId
 
             if(hasReservation == false) {
                 // Reserve book
-//                FirestoreClass().getUserDetails(this)
                 viewLifecycleOwner.lifecycleScope.launch {
                     reserveBook(userInfo, bookInfo)
                 }
@@ -107,7 +94,7 @@ class SBookDetailsFragment : BaseFragment() {
 
     private suspend fun getBookDetails(){
         showProgressDialog()
-//        FirestoreClass().getBookDetails(this, bookId)
+
         viewModel.getBookDetails(args.bookId)
         val bookInfo = viewModel.bookInfo
         showBookDetails(bookInfo)
@@ -120,25 +107,10 @@ class SBookDetailsFragment : BaseFragment() {
         binding.textSBookDetailsAuthor.text = book.book_author
         binding.textSBookDetailsYear.text = book.book_year
 
-//        bookTitle = book.book_title
-//        bookImage = book.book_image
-
-        Glide.with(this)
-            .load(book.book_image)
-            .apply(
-                RequestOptions.placeholderOf(R.drawable.unknown)
-                .override(80,80))
-            .into(binding.sBookDetailsImage)
-    }
-
-    fun failedGetBookDetails() {
-        hideProgressDialog()
-        showErrorSnackBar("Unable to get the book details.", true)
+        GlideLoader(this).loadImage(book.book_image, binding.sBookDetailsImage, 80)
     }
 
     suspend fun loadReservation(){
-//        showProgressDialog()
-//        FirestoreClass().getBookReservation(this, bookId)
         viewModel.getBookReservation(args.bookId)
         val reservationList = viewModel.reservationList
         val hasReservation = viewModel.hasReservation
@@ -147,13 +119,9 @@ class SBookDetailsFragment : BaseFragment() {
     }
 
     fun successLoadReservation(myReservations: ArrayList<BookReservation>, hasReservation: Boolean) {
-//        hideProgressDialog()
-
         if(hasReservation == true) {
             binding.btnReserve.text = "Cancel"
             binding.btnReserve.backgroundTintList = (ContextCompat.getColorStateList((requireActivity() as MainActivity), R.color.dark_red))
-//            binding.btnReserve.text = "Reserved"
-//            binding.btnReserve.isEnabled = false
         }
 
         val recyclerView = binding.root.findViewById<RecyclerView>(R.id.rv_s_book_details)
@@ -186,7 +154,6 @@ class SBookDetailsFragment : BaseFragment() {
             time
         )
 
-//        FirestoreClass().reserveBook(this, reservation)
         val result = viewModel.reserveBook(reservation)
 
         if(result) {

@@ -1,6 +1,5 @@
 package com.example.apverse.ui.librarian.room
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.apverse.firestore.Firestore
 import com.example.apverse.model.RoomBooking

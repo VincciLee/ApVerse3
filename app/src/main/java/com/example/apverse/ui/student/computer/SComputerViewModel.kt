@@ -1,9 +1,7 @@
 package com.example.apverse.ui.student.computer
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.apverse.firestore.Firestore
-import com.example.apverse.firestore.FirestoreClass
 import com.example.apverse.model.Computers
 
 class SComputerViewModel: ViewModel() {

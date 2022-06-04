@@ -1,14 +1,10 @@
 package com.example.apverse.ui.student.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.apverse.firestore.Firestore
-import com.example.apverse.firestore.FirestoreClass
-import com.example.apverse.model.NewRoomBooking
 import com.example.apverse.model.RoomBooking
 import com.example.apverse.model.Rooms
 import com.example.apverse.utils.Constants
-import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -35,11 +31,9 @@ class SMyRoomViewModel: ViewModel() {
     suspend fun getMyRoomBookingInfo(docId: String) {
         val data = Firestore().getMyRoomBookingInfo(docId)
         myBookingInfo = data?.toObject(RoomBooking::class.java)!!
-        Log.i("ApVerse::SMyRoomVM", "getMyRoomBookingInfo() = Room "+myBookingInfo.room_id)
     }
 
     suspend fun validateRoomBooking(docId: String, roomId: String, hashMap: HashMap<String, Any>) : Boolean {
-        Log.i("ApVerse::SRoomBookVM", "validateRoomBooking()")
         existingBookings.clear()
 
         val bookingDate = hashMap[Constants.DATE].toString()
@@ -57,13 +51,9 @@ class SMyRoomViewModel: ViewModel() {
         val currentHour = currentTime.substringBefore(":")
         val currentMinute = currentTime.substringAfter(":")
 
-        Log.i("ApVerse::SRoomBookVM", "bookingDate = $bookingDate, minute = $minute")
         val date = dateFormatter.parse(bookingDate)
-        Log.i("ApVerse::SRoomBookVM", "date = $date")
         calendar.setTime(date)
         val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
-        Log.i("ApVerse::SRoomBookVM", "date = $bookingDate, $dayOfWeek")
-        Log.i("ApVerse:: MyRoomVM", "hour = $hour")
 
         val data = Firestore().getSelectedRoomBookings(roomId, bookingDate)
         for (i in data?.documents!!){
@@ -83,7 +73,7 @@ class SMyRoomViewModel: ViewModel() {
             errorMessage = "Cannot book discussion room on weekends."
             return false
         }
-        else if (hour.toInt() < 9 || hour.toInt() > 18){
+        else if (hour.toInt() < 9 || hour.toInt() >= 18){
             errorMessage = "The time selected must between 9am and 6pm."
             return false
         }

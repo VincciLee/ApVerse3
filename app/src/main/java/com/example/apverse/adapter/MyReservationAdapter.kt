@@ -72,5 +72,4 @@ class MyReservationAdapter(
         return dataset.size
     }
 
-
 }

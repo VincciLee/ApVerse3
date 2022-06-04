@@ -1,18 +1,13 @@
 package com.example.apverse.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apverse.R
-import com.example.apverse.firestore.Firestore
-import com.example.apverse.firestore.FirestoreClass
 import com.example.apverse.model.BookReservation
-import com.example.apverse.ui.student.book.SBookDetailsFragment
 import com.example.apverse.utils.Constants
 
 class BookDetailsAdapter(
@@ -34,8 +29,6 @@ class BookDetailsAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        Log.i("ApVerse::DetailsAdapter", "in onBindViewHolder()")
-
         if (holder is BookDetailsViewHolder) {
             val item = dataset[position]
             val docId = item.doc_id
@@ -47,12 +40,12 @@ class BookDetailsAdapter(
 
             holder.itemView.findViewById<TextView>(R.id.text_reserved_student).text = studentName
             holder.itemView.findViewById<TextView>(R.id.text_reserved_date).text = date
-            holder.itemView.findViewById<TextView>(R.id.text_reserved_status).text = status
 
-            if(studentEmail == Firestore().getCurrentUserEmail()) {
-                if(isReady == true) {
-                    holder.itemView.findViewById<TextView>(R.id.text_reserved_status).text = Constants.IS_READY
-                }
+            if(isReady == true) {
+                holder.itemView.findViewById<TextView>(R.id.text_reserved_status).text = Constants.IS_READY
+            }
+            else {
+                holder.itemView.findViewById<TextView>(R.id.text_reserved_status).text = status
             }
         }
     }

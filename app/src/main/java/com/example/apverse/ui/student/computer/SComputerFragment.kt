@@ -2,8 +2,6 @@ package com.example.apverse.ui.student.computer
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,20 +12,12 @@ import com.example.apverse.MainActivity
 import com.example.apverse.R
 import com.example.apverse.adapter.ComputerAdapter
 import com.example.apverse.databinding.FragmentSComputerBinding
-import com.example.apverse.firestore.Firestore
-import com.example.apverse.firestore.FirestoreClass
 import com.example.apverse.model.Computers
-import com.example.apverse.model.Rooms
 import com.example.apverse.ui.BaseFragment
-import com.example.apverse.utils.Constants
 import kotlinx.coroutines.launch
 
 class SComputerFragment : BaseFragment() {
 
-//    companion object {
-//        fun newInstance() = SComputerFragment()
-//    }
-//
     private lateinit var viewModel: SComputerViewModel
 
     private var _binding: FragmentSComputerBinding? = null
@@ -56,7 +46,7 @@ class SComputerFragment : BaseFragment() {
 
     suspend fun loadComputers(){
         showProgressDialog()
-//        FirestoreClass().getComputers(this)
+
         viewModel.getComputerList()
         val computerList = viewModel.computerList
         val isUsing = viewModel.isUsing
@@ -93,14 +83,6 @@ class SComputerFragment : BaseFragment() {
 
     fun reload() {
         this.findNavController().navigate(R.id.action_nav_s_computer_self)
-//        getFragmentManager()?.beginTransaction()?.detach(this)?.attach(this)?.commit()
-//        requireActivity().supportFragmentManager.beginTransaction().detach(this).attach(this).commit()
     }
-
-//    override fun onActivityCreated(savedInstanceState: Bundle?) {
-//        super.onActivityCreated(savedInstanceState)
-//        viewModel = ViewModelProvider(this).get(SComputerViewModel::class.java)
-//        // TODO: Use the ViewModel
-//    }
 
 }

@@ -1,6 +1,5 @@
 package com.example.apverse.adapter
 
-import android.service.autofill.Dataset
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +9,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apverse.R
 import com.example.apverse.firestore.Firestore
-import com.example.apverse.firestore.FirestoreClass
 import com.example.apverse.model.Computers
 import com.example.apverse.ui.student.computer.SComputerFragment
 import com.example.apverse.utils.Constants
@@ -44,7 +42,6 @@ class ComputerAdapter(
              val status = item.computer_status
              val computerUser = item.student_email
              val computerHashmap: HashMap<String, Any> = HashMap()
-             val checkingHashMap: HashMap<String, Any> = HashMap()
 
              holder.itemView.findViewById<TextView>(R.id.text_computer).text = "Computer $computerId"
              Log.i("ApVerse::CompAdapter", "docId: $docId")
@@ -78,24 +75,16 @@ class ComputerAdapter(
                          Log.i("ApVerse::CompAdapter", "isUsing == true")
                          computerHashmap[Constants.COMPUTER_STATUS] = Constants.FREE
                          computerHashmap[Constants.STUDENT_EMAIL] = ""
-
-//                         checkingHashMap[Constants.STUDENT_EMAIL] = FirestoreClass().getCurrentUserEmail()
                      }
                  }else{
                      Log.i("ApVerse::CompAdapter", "isUsing == false")
                      computerHashmap[Constants.COMPUTER_STATUS] = Constants.IN_USE
                      computerHashmap[Constants.STUDENT_EMAIL] = Firestore().getCurrentUserEmail()
-
-//                     checkingHashMap[Constants.COMPUTER_ID] = computerId
                  }
 
                  fragment.viewLifecycleOwner.lifecycleScope.launch {
                      fragment.updateComputerStatus(docId, computerHashmap)
                  }
-
-//                 Firestore().get
-//                 FirestoreClass().updateComputerStatus(fragment, computerHashmap, docId)
-//                 FirestoreClass().getDocumentId(fragment, Constants.COMPUTERS, computerHashmap, checkingHashMap)
              }
          }
     }
