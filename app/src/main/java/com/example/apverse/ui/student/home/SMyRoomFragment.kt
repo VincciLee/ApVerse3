@@ -2,6 +2,7 @@ package com.example.apverse.ui.student.home
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -118,14 +119,30 @@ class SMyRoomFragment : BaseFragment() {
         bookingHashMap[Constants.TIME] = time
         bookingHashMap[Constants.HDMI_CABLE] = hasHdmi
 
-        val result = viewModel.validateRoomBooking(args.docId, args.roomId, bookingHashMap)
+        when {
+            TextUtils.isEmpty(name) -> {
+                showErrorSnackBar("Please do not leave the name field blank", true)
+            }
+            TextUtils.isEmpty(tp) -> {
+                showErrorSnackBar("Please do not leave the tp field blank", true)
+            }
+            TextUtils.isEmpty(date) -> {
+                showErrorSnackBar("Please do not leave the date field blank", true)
+            }
+            TextUtils.isEmpty(time) -> {
+                showErrorSnackBar("Please do not leave the time field blank", true)
+            }
+            else -> {
+                val result = viewModel.validateRoomBooking(args.docId, args.roomId, bookingHashMap)
 
-        if(result) {
-            showErrorSnackBar("Room booking updated.", false)
-            this.findNavController().navigate(SMyRoomFragmentDirections.actionSMyRoomFragmentToNavSHome())
-        }
-        else{
-            showErrorSnackBar(viewModel.errorMessage, true)
+                if(result) {
+                    showErrorSnackBar("Room booking updated.", false)
+                    this.findNavController().navigate(SMyRoomFragmentDirections.actionSMyRoomFragmentToNavSHome())
+                }
+                else{
+                    showErrorSnackBar(viewModel.errorMessage, true)
+                }
+            }
         }
     }
 

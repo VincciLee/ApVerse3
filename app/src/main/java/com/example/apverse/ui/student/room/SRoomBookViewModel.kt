@@ -69,15 +69,18 @@ class SRoomBookViewModel: ViewModel() {
             errorMessage = "Cannot book discussion room before today."
             return false
         }
-        else if (dayOfWeek == 1 || dayOfWeek == 7) {
+
+        if (dayOfWeek == 1 || dayOfWeek == 7) {
             errorMessage = "Cannot book discussion room on weekends."
             return false
         }
-        else if (hour.toInt() < 9 || hour.toInt() >= 18){
+
+        if (hour.toInt() < 9 || hour.toInt() >= 18){
             errorMessage = "The time selected must between 9am and 6pm."
             return false
         }
-        else if (bookingDate?.compareTo(currentDate) == 0){
+
+        if (bookingDate?.compareTo(currentDate) == 0){
             if (hour.toInt() < currentHour.toInt()) {
                 errorMessage = "The time selected must later than current time."
                 return false
@@ -87,11 +90,13 @@ class SRoomBookViewModel: ViewModel() {
                 return false
             }
         }
-        else if (minute != "30" && minute != "00") {
+
+        if (minute != "30" && minute != "00") {
             errorMessage = "The time selected must 30 minutes interval."
             return false
         }
-        else if (hasBooked) {
+
+        if (hasBooked) {
             errorMessage = "You have booked this room on this day."
             return false
         }
